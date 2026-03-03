@@ -1,5 +1,5 @@
 ### Успешное создание проекта 201 Created (Ошибка 409: Дубликат проекта - запустите дважды для проверки)
-POST http://localhost:8084/api/projects/project
+POST http://localhost:8084/api/project/project
 Content-Type: application/json
 X-Telegram-User-Id: 123456789
 X-Telegram-Username: llllqqqqqqqqq
@@ -12,7 +12,7 @@ X-User-Roles: STUDENT
 }
 
 ### Ошибка 400: Невалидный URL
-POST http://localhost:8084/api/projects/project
+POST http://localhost:8084/api/project/project
 Content-Type: application/json
 X-Telegram-User-Id: 123456789
 X-Telegram-Username: llllqqqqqqqqq
@@ -24,7 +24,7 @@ X-Telegram-Username: llllqqqqqqqqq
 }
 
 ### Ошибка 400: Пустое обязательное поле (programming_language)
-POST http://localhost:8084/api/projects/project
+POST http://localhost:8084/api/project/project
 Content-Type: application/json
 X-Telegram-User-Id: 123456789
 X-Telegram-Username: llllqqqqqqqqq
@@ -36,7 +36,7 @@ X-Telegram-Username: llllqqqqqqqqq
 }
 
 ### Ошибка 400: Отсутствует заголовок X-Telegram-User-Id
-POST http://localhost:8084/api/projects/project
+POST http://localhost:8084/api/project/project
 Content-Type: application/json
 
 {
@@ -46,7 +46,7 @@ Content-Type: application/json
 }
 
 ### Ошибка 400: Отсутствует заголовок X-Telegram-Username
-POST http://localhost:8084/api/projects/project
+POST http://localhost:8084/api/project/project
 Content-Type: application/json
 X-Telegram-User-Id: 123456789
 
@@ -57,7 +57,7 @@ X-Telegram-User-Id: 123456789
 }
 
 ### Ошибка 400: Неизвестный тип проекта
-POST http://localhost:8084/api/projects/project
+POST http://localhost:8084/api/project/project
 Content-Type: application/json
 X-Telegram-User-Id: 123456789
 

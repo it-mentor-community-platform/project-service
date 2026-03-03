@@ -1,6 +1,6 @@
 ### Успешное создание проекта через Телеграмм бота -  201 Created (Ошибка 409: Дубликат проекта - запустите дважды для проверки)
 # added_timestamp передастся в response как нынешнее значение,даже если на вход придет другой added_timestamp
-POST http://localhost:8084/api/projects/internal/project
+POST http://localhost:8084/api/project/internal/project
 Content-Type: application/json
 
 {
@@ -14,7 +14,7 @@ Content-Type: application/json
 }
 
 ### Успешное создание проекта через Data-Importer -  201 Created (Ошибка 409: Дубликат проекта - запустите дважды для проверки)
-POST http://localhost:8084/api/projects/internal/project
+POST http://localhost:8084/api/project/internal/project
 Content-Type: application/json
 
 {
@@ -30,7 +30,7 @@ Content-Type: application/json
 
 
 ### Ошибка 400: Пустое обязательное поле
-POST http://localhost:8084/api/projects/internal/project
+POST http://localhost:8084/api/project/internal/project
 Content-Type: application/json
 
 {
@@ -44,7 +44,7 @@ Content-Type: application/json
 }
 
 ### Ошибка 400: Отсутствует author_telegram_user_id
-POST http://localhost:8084/api/projects/internal/project
+POST http://localhost:8084/api/project/internal/project
 Content-Type: application/json
 
 {
@@ -57,7 +57,7 @@ Content-Type: application/json
 }
 
 ###Ошибка 400: Неверный project_source_type
-POST http://localhost:8084/api/projects/internal/project
+POST http://localhost:8084/api/project/internal/project
 Content-Type: application/json
 
 {
@@ -71,7 +71,7 @@ Content-Type: application/json
 }
 
 ###Ошибка 400: Неизвестный тип проекта
-POST http://localhost:8084/api/projects/internal/project
+POST http://localhost:8084/api/project/internal/project
 Content-Type: application/json
 
 {
