@@ -1,0 +1,49 @@
+### Успешное создание ревью
+# Перед запуском: проект с этим github_repository_url уже должен существовать в БД
+POST http://localhost:8084/api/project/review
+Content-Type: application/json
+X-Telegram-User-Id: 987654321
+
+{
+  "project_github_repository_url": "https://github.com/test-user/project-review-test",
+  "review_url": "https://github.com/test-user/project-review-test/pull/1"
+}
+
+### Ошибка 404: проект не найден
+POST http://localhost:8084/api/project/review
+Content-Type: application/json
+X-Telegram-User-Id: 987654321
+
+{
+  "project_github_repository_url": "https://github.com/test-user/not-found-project",
+  "review_url": "https://github.com/test-user/not-found-project/pull/1"
+}
+
+### Ошибка 400: невалидный GitHub URL проекта
+POST http://localhost:8084/api/project/review
+Content-Type: application/json
+X-Telegram-User-Id: 987654321
+
+{
+  "project_github_repository_url": "not-url",
+  "review_url": "https://github.com/test-user/project-review-test/pull/1"
+}
+
+### Ошибка 400: невалидный review URL
+POST http://localhost:8084/api/project/review
+Content-Type: application/json
+X-Telegram-User-Id: 987654321
+
+{
+  "project_github_repository_url": "https://github.com/test-user/project-review-test",
+  "review_url": "not-url"
+}
+
+### Ошибка 400: отсутствует X-Telegram-User-Id
+POST http://localhost:8084/api/project/review
+Content-Type: application/json
+
+{
+  "project_github_repository_url": "https://github.com/test-user/project-review-test",
+  "review_url": "https://github.com/test-user/project-review-test/pull/1"
+}
