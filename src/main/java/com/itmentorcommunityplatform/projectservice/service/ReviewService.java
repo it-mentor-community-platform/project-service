@@ -2,6 +2,7 @@ package com.itmentorcommunityplatform.projectservice.service;
 
 import com.itmentorcommunityplatform.projectservice.dto.CreateReviewViaFrontendRequest;
 import com.itmentorcommunityplatform.projectservice.dto.ReviewResponse;
+import com.itmentorcommunityplatform.projectservice.kafka.ReviewStudentNotificationEventProducer;
 import com.itmentorcommunityplatform.projectservice.mapper.ReviewMapper;
 import com.itmentorcommunityplatform.projectservice.model.Project;
 import com.itmentorcommunityplatform.projectservice.model.Review;
@@ -22,6 +23,7 @@ public class ReviewService {
     private final ProjectRepository projectRepository;
     private final ReviewRepository reviewRepository;
     private final ReviewMapper reviewMapper;
+    private final ReviewStudentNotificationEventProducer reviewStudentNotificationProducer;
 
     @Transactional
     public ReviewResponse createReviewViaFrontend(
@@ -57,6 +59,8 @@ public class ReviewService {
                 project.getId(),
                 reviewerTelegramUserId
         );
+
+        reviewStudentNotificationProducer.sendReviewStudentNotification(reviewMapper.toEvent(savedReview, project));
 
         return reviewMapper.toReviewResponse(savedReview, project);
     }

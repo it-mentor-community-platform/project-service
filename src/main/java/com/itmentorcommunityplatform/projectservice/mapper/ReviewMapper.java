@@ -2,6 +2,7 @@ package com.itmentorcommunityplatform.projectservice.mapper;
 
 import com.itmentorcommunityplatform.projectservice.dto.CreateReviewViaFrontendRequest;
 import com.itmentorcommunityplatform.projectservice.dto.ReviewResponse;
+import com.itmentorcommunityplatform.projectservice.kafka.ReviewStudentNotificationEvent;
 import com.itmentorcommunityplatform.projectservice.model.Project;
 import com.itmentorcommunityplatform.projectservice.model.Review;
 import org.mapstruct.Mapper;
@@ -28,4 +29,12 @@ public interface ReviewMapper {
     @Mapping(target = "addedTimestamp", source = "review.addedTimestamp")
     @Mapping(target = "project", source = "project")
     ReviewResponse toReviewResponse(Review review, Project project);
+
+    @Mapping(target = "id", source = "review.id")
+    @Mapping(target = "reviewerTelegramUserId", source = "review.reviewerTelegramUserId")
+    @Mapping(target = "url", source = "review.url")
+    @Mapping(target = "addedTimestamp", source = "review.addedTimestamp")
+    @Mapping(target = "project", source = "project")
+    ReviewStudentNotificationEvent toEvent(Review review, Project project);
+
 }
