@@ -1,7 +1,8 @@
 package com.itmentorcommunityplatform.projectservice.service;
 
-import com.itmentorcommunityplatform.projectservice.dto.CreateReviewViaFrontendRequest;
-import com.itmentorcommunityplatform.projectservice.dto.ReviewResponse;
+import com.itmentorcommunityplatform.projectservice.dto.review.CreateReviewViaFrontendRequest;
+import com.itmentorcommunityplatform.projectservice.dto.review.CreateReviewViaImporterRequest;
+import com.itmentorcommunityplatform.projectservice.dto.review.ReviewResponse;
 import com.itmentorcommunityplatform.projectservice.kafka.ReviewStudentNotificationEventProducer;
 import com.itmentorcommunityplatform.projectservice.mapper.ReviewMapper;
 import com.itmentorcommunityplatform.projectservice.model.Project;
@@ -14,6 +15,8 @@ import org.springframework.http.HttpStatus;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 import org.springframework.web.server.ResponseStatusException;
+
+import java.time.Instant;
 
 @Slf4j
 @Service
@@ -45,7 +48,7 @@ public class ReviewService {
         Long addedTimestamp = System.currentTimeMillis() / 1000;
 
         Review review = reviewMapper.toReviewEntity(
-                request,
+                request.reviewUrl(),
                 project,
                 reviewerTelegramUserId,
                 addedTimestamp
@@ -64,4 +67,47 @@ public class ReviewService {
 
         return reviewMapper.toReviewResponse(savedReview, project);
     }
+
+    @Transactional
+    public ReviewResponse createReviewViaImporter(CreateReviewViaImporterRequest request) {
+        String projectGithubRepositoryUrl = request.projectGithubRepositoryUrl();
+        String reviewUrl = request.reviewUrl();
+        long reviewerTelegramUserId = request.reviewerTelegramUserId();
+        long addedTimestamp = request.addedTimestamp() != null
+                ? request.addedTimestamp()
+                : Instant.now().getEpochSecond();
+
+        log.info(
+                "Creating review via Data Importer: projectGithubRepositoryUrl={}, reviewerTelegramUserId={}",
+                projectGithubRepositoryUrl,
+                reviewerTelegramUserId
+        );
+
+        Project project = projectRepository.findByGithubRepositoryUrl(projectGithubRepositoryUrl)
+                .orElseThrow(() -> new ResponseStatusException(
+                        HttpStatus.NOT_FOUND,
+                        "Project not found"
+                ));
+
+        Review review = reviewMapper.toReviewEntity(
+                reviewUrl,
+                project,
+                reviewerTelegramUserId,
+                addedTimestamp
+        );
+
+        Review savedReview = reviewRepository.save(review);
+
+        log.info(
+                "Review created via Data Importer: reviewId={}, projectId={}, reviewerTelegramUserId={}",
+                savedReview.getId(),
+                project.getId(),
+                reviewerTelegramUserId
+        );
+
+        reviewStudentNotificationProducer.sendReviewStudentNotification(reviewMapper.toEvent(savedReview, project));
+
+        return reviewMapper.toReviewResponse(savedReview, project);
+    }
+
 }

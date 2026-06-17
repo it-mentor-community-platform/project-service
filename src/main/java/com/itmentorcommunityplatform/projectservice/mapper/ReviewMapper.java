@@ -1,7 +1,6 @@
 package com.itmentorcommunityplatform.projectservice.mapper;
 
-import com.itmentorcommunityplatform.projectservice.dto.CreateReviewViaFrontendRequest;
-import com.itmentorcommunityplatform.projectservice.dto.ReviewResponse;
+import com.itmentorcommunityplatform.projectservice.dto.review.ReviewResponse;
 import com.itmentorcommunityplatform.projectservice.kafka.ReviewStudentNotificationEvent;
 import com.itmentorcommunityplatform.projectservice.model.Project;
 import com.itmentorcommunityplatform.projectservice.model.Review;
@@ -14,10 +13,10 @@ public interface ReviewMapper {
     @Mapping(target = "id", ignore = true)
     @Mapping(target = "projectId", source = "project.id")
     @Mapping(target = "reviewerTelegramUserId", source = "reviewerTelegramUserId")
-    @Mapping(target = "url", source = "request.reviewUrl")
+    @Mapping(target = "url", source = "reviewUrl")
     @Mapping(target = "addedTimestamp", source = "addedTimestamp")
     Review toReviewEntity(
-            CreateReviewViaFrontendRequest request,
+            String reviewUrl,
             Project project,
             Long reviewerTelegramUserId,
             Long addedTimestamp

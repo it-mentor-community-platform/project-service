@@ -1,7 +1,7 @@
 package com.itmentorcommunityplatform.projectservice.docs.review;
 
 import com.itmentorcommunityplatform.projectservice.dto.ErrorResponse;
-import com.itmentorcommunityplatform.projectservice.dto.ReviewResponse;
+import com.itmentorcommunityplatform.projectservice.dto.review.ReviewResponse;
 import io.swagger.v3.oas.annotations.Operation;
 import io.swagger.v3.oas.annotations.headers.Header;
 import io.swagger.v3.oas.annotations.media.Content;
