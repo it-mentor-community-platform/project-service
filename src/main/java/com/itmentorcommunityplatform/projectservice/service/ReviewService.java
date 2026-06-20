@@ -3,6 +3,7 @@ package com.itmentorcommunityplatform.projectservice.service;
 import com.itmentorcommunityplatform.projectservice.dto.review.CreateReviewViaFrontendRequest;
 import com.itmentorcommunityplatform.projectservice.dto.review.CreateReviewViaImporterRequest;
 import com.itmentorcommunityplatform.projectservice.dto.review.ReviewResponse;
+import com.itmentorcommunityplatform.projectservice.exception.ProjectNotFoundException;
 import com.itmentorcommunityplatform.projectservice.kafka.ReviewStudentNotificationEventProducer;
 import com.itmentorcommunityplatform.projectservice.mapper.ReviewMapper;
 import com.itmentorcommunityplatform.projectservice.model.Project;
@@ -11,10 +12,7 @@ import com.itmentorcommunityplatform.projectservice.repository.ProjectRepository
 import com.itmentorcommunityplatform.projectservice.repository.ReviewRepository;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
-import org.springframework.http.HttpStatus;
 import org.springframework.stereotype.Service;
-import org.springframework.transaction.annotation.Transactional;
-import org.springframework.web.server.ResponseStatusException;
 
 import java.time.Instant;
 
@@ -28,22 +26,19 @@ public class ReviewService {
     private final ReviewMapper reviewMapper;
     private final ReviewStudentNotificationEventProducer reviewStudentNotificationProducer;
 
-    @Transactional
     public ReviewResponse createReviewViaFrontend(
             CreateReviewViaFrontendRequest request,
             Long reviewerTelegramUserId
     ) {
+        String projectGithubRepositoryUrl = request.projectGithubRepositoryUrl();
         log.info(
                 "Creating review via frontend: projectGithubRepositoryUrl={}, reviewerTelegramUserId={}",
-                request.projectGithubRepositoryUrl(),
+                projectGithubRepositoryUrl,
                 reviewerTelegramUserId
         );
 
-        Project project = projectRepository.findByGithubRepositoryUrl(request.projectGithubRepositoryUrl())
-                .orElseThrow(() -> new ResponseStatusException(
-                        HttpStatus.NOT_FOUND,
-                        "Project not found"
-                ));
+        Project project = projectRepository.findByGithubRepositoryUrl(projectGithubRepositoryUrl)
+                .orElseThrow(() -> new ProjectNotFoundException(projectGithubRepositoryUrl));
 
         Long addedTimestamp = System.currentTimeMillis() / 1000;
 
@@ -68,7 +63,6 @@ public class ReviewService {
         return reviewMapper.toReviewResponse(savedReview, project);
     }
 
-    @Transactional
     public ReviewResponse createReviewViaImporter(CreateReviewViaImporterRequest request) {
         String projectGithubRepositoryUrl = request.projectGithubRepositoryUrl();
         String reviewUrl = request.reviewUrl();
@@ -84,10 +78,7 @@ public class ReviewService {
         );
 
         Project project = projectRepository.findByGithubRepositoryUrl(projectGithubRepositoryUrl)
-                .orElseThrow(() -> new ResponseStatusException(
-                        HttpStatus.NOT_FOUND,
-                        "Project not found"
-                ));
+                .orElseThrow(() -> new ProjectNotFoundException(projectGithubRepositoryUrl));
 
         Review review = reviewMapper.toReviewEntity(
                 reviewUrl,
@@ -104,8 +95,6 @@ public class ReviewService {
                 project.getId(),
                 reviewerTelegramUserId
         );
-
-        reviewStudentNotificationProducer.sendReviewStudentNotification(reviewMapper.toEvent(savedReview, project));
 
         return reviewMapper.toReviewResponse(savedReview, project);
     }
