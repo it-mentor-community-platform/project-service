@@ -2,7 +2,7 @@ package com.itmentorcommunityplatform.projectservice.kafka;
 
 import com.fasterxml.jackson.databind.PropertyNamingStrategies;
 import com.fasterxml.jackson.databind.annotation.JsonNaming;
-import com.itmentorcommunityplatform.projectservice.dto.ProjectResponse;
+import com.itmentorcommunityplatform.projectservice.dto.project.ProjectResponse;
 import lombok.Builder;
 
 @Builder

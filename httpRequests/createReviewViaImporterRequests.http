@@ -1,0 +1,65 @@
+### Успешное создание ревью
+# Перед запуском: проект с этим github_repository_url уже должен существовать в БД
+POST http://localhost:8084/api/project/internal/review
+Content-Type: application/json
+
+{
+  "project_github_repository_url": "https://github.com/test-user/project-review-test",
+  "review_url": "https://github.com/test-user/project-review-test/pull/1",
+  "reviewer_telegram_user_id": 123456,
+  "added_timestamp": 123
+}
+
+### Успешное создание ревью c null added timestamp
+# Перед запуском: проект с этим github_repository_url уже должен существовать в БД
+POST http://localhost:8084/api/project/internal/review
+Content-Type: application/json
+
+{
+  "project_github_repository_url": "https://github.com/test-user/project-review-test",
+  "review_url": "https://github.com/test-user/project-review-test/pull/1",
+  "reviewer_telegram_user_id": 123456
+}
+
+### Ошибка 404: проект не найден
+POST http://localhost:8084/api/project/internal/review
+Content-Type: application/json
+
+{
+  "project_github_repository_url": "https://github.com/test-user/not-found-project",
+  "review_url": "https://github.com/test-user/not-found-project/pull/1",
+  "reviewer_telegram_user_id": 123456,
+  "added_timestamp": 123
+}
+
+### Ошибка 400: невалидный GitHub URL проекта
+POST http://localhost:8084/api/project/internal/review
+Content-Type: application/json
+
+{
+  "project_github_repository_url": "not-url",
+  "review_url": "https://github.com/test-user/project-review-test/pull/1",
+  "reviewer_telegram_user_id": 123456,
+  "added_timestamp": 123
+}
+
+### Ошибка 400: невалидный review URL
+POST http://localhost:8084/api/project/internal/review
+Content-Type: application/json
+
+{
+  "project_github_repository_url": "https://github.com/test-user/project-review-test",
+  "review_url": "not-url",
+  "reviewer_telegram_user_id": 123456,
+  "added_timestamp": 123
+}
+
+### Ошибка 400: отсутствует Telegram user ID
+POST http://localhost:8084/api/project/internal/review
+Content-Type: application/json
+
+{
+  "project_github_repository_url": "https://github.com/test-user/project-review-test",
+  "review_url": "https://github.com/test-user/project-review-test/pull/1",
+  "added_timestamp": 123
+}

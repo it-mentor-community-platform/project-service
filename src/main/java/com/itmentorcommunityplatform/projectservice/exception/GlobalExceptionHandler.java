@@ -70,6 +70,14 @@ public class GlobalExceptionHandler {
                 .body(new ErrorResponse("Missing required header: " + ex.getHeaderName()));
     }
 
+    @ExceptionHandler(ProjectNotFoundException.class)
+    public ResponseEntity<ErrorResponse> handleNotFoundException(ProjectNotFoundException ex) {
+        log.warn("Project not found: {}", ex.getMessage());
+        return ResponseEntity
+                .status(HttpStatus.NOT_FOUND)
+                .body(new ErrorResponse("Project not found: " + ex.getMessage()));
+    }
+
     @ExceptionHandler(ResponseStatusException.class)
     public ResponseEntity<ErrorResponse> handleResponseStatusException(ResponseStatusException exception) {
         log.info(

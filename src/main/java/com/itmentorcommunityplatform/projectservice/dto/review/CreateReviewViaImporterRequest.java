@@ -1,10 +1,11 @@
-package com.itmentorcommunityplatform.projectservice.dto;
+package com.itmentorcommunityplatform.projectservice.dto.review;
 
 import com.fasterxml.jackson.annotation.JsonProperty;
 import jakarta.validation.constraints.NotBlank;
+import jakarta.validation.constraints.NotNull;
 import org.hibernate.validator.constraints.URL;
 
-public record CreateReviewViaFrontendRequest(
+public record CreateReviewViaImporterRequest(
         @NotBlank(message = "Project GitHub repository URL cannot be empty")
         @URL(
                 protocol = "https",
@@ -20,6 +21,13 @@ public record CreateReviewViaFrontendRequest(
                 message = "Review URL must be a valid https URL"
         )
         @JsonProperty("review_url")
-        String reviewUrl
+        String reviewUrl,
+
+        @NotNull(message = "Review telegram user id cannot be empty")
+        @JsonProperty("reviewer_telegram_user_id")
+        Long reviewerTelegramUserId,
+
+        @JsonProperty("added_timestamp")
+        Long addedTimestamp
 ) {
 }

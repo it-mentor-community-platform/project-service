@@ -1,6 +1,7 @@
-package com.itmentorcommunityplatform.projectservice.dto;
+package com.itmentorcommunityplatform.projectservice.dto.review;
 
 import com.fasterxml.jackson.annotation.JsonProperty;
+import com.itmentorcommunityplatform.projectservice.dto.project.ProjectResponse;
 
 public record ReviewResponse(
         Long id,
