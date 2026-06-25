@@ -34,8 +34,7 @@ import java.lang.annotation.Target;
                 - `roadmap_project` — project identifier in the roadmap
                   (available options: HANGMAN, SIMULATION, CURRENCY-EXCHANGE, TENNIS-SCOREBOARD,
                   WEATHER-VIEWER, CLOUD-FILE-STORAGE, TASK-TRACKER, OTHER)
-                - `telegram_user_id` — ID of the Telegram user the project is linked to
-                - `telegram_username` — Telegram username
+                - `author_telegram_username` — Telegram username
                 - `added_timestamp` — project addition time (used only for DATA_IMPORTER;
                   ignored and overwritten with current time for TELEGRAM_BOT source)
                 - `project_source_type` — project source (`TELEGRAM_BOT` or `DATA_IMPORTER`)
@@ -53,8 +52,7 @@ import java.lang.annotation.Target;
                                                   "github_repository_url": "https://github.com/zhukovsd/hangman",
                                                   "programming_language": "Java",
                                                   "roadmap_project": "HANGMAN",
-                                                  "telegram_user_id": 124551251,
-                                                  "telegram_username": "zhukovsd",
+                                                  "author_telegram_username": "zhukovsd",
                                                   "project_source_type": "TELEGRAM_BOT"
                                                 }
                                                 """
@@ -67,13 +65,37 @@ import java.lang.annotation.Target;
                                                   "github_repository_url": "https://github.com/zhukovsd/hangman",
                                                   "programming_language": "Java",
                                                   "roadmap_project": "HANGMAN",
-                                                  "telegram_user_id": 124551251,
-                                                  "telegram_username": "zhukovsd",
+                                                  "author_telegram_username": "zhukovsd",
                                                   "added_timestamp": 1765628000,
                                                   "project_source_type": "DATA_IMPORTER"
                                                 }
                                                 """
-                                )
+                                ),
+                                @ExampleObject(
+                                        name = "Creation via Telegram bot without field author_telegram_username",
+                                        value = """
+                                                {
+                                                  "author_telegram_user_id": 123,
+                                                  "github_repository_url": "https://github.com/zhukovsd/hangman",
+                                                  "programming_language": "Java",
+                                                  "roadmap_project": "HANGMAN",
+                                                  "project_source_type": "TELEGRAM_BOT"
+                                                }
+                                                """
+                                ),
+                                @ExampleObject(
+                                        name = "Creation via Data Importer without field author_telegram_username",
+                                        value = """
+                                                {
+                                                  "author_telegram_user_id": 123,
+                                                  "github_repository_url": "https://github.com/zhukovsd/hangman",
+                                                  "programming_language": "Java",
+                                                  "roadmap_project": "HANGMAN",
+                                                  "added_timestamp": 1765628000,
+                                                  "project_source_type": "DATA_IMPORTER"
+                                                }
+                                                """
+                                ),
                         }
                 )
         )

@@ -2,9 +2,9 @@ package com.itmentorcommunityplatform.projectservice.controller;
 
 import com.itmentorcommunityplatform.projectservice.docs.project.CreateProjectViaFrontendDocs;
 import com.itmentorcommunityplatform.projectservice.docs.project.CreateProjectViaTelegramBotOrImporterDocs;
-import com.itmentorcommunityplatform.projectservice.dto.CreateProjectViaFrontendRequest;
-import com.itmentorcommunityplatform.projectservice.dto.CreateProjectViaTelegramBotOrImportRequest;
-import com.itmentorcommunityplatform.projectservice.dto.ProjectResponse;
+import com.itmentorcommunityplatform.projectservice.dto.project.CreateProjectViaFrontendRequest;
+import com.itmentorcommunityplatform.projectservice.dto.project.CreateProjectViaTelegramBotOrImportRequest;
+import com.itmentorcommunityplatform.projectservice.dto.project.ProjectResponse;
 import com.itmentorcommunityplatform.projectservice.service.ProjectService;
 import jakarta.validation.Valid;
 import lombok.RequiredArgsConstructor;
@@ -24,7 +24,7 @@ public class ProjectController {
     @CreateProjectViaFrontendDocs
     public ResponseEntity<ProjectResponse> createProjectViaFrontend(
             @RequestHeader("X-Telegram-User-Id") Long telegramUserId,
-            @RequestHeader("X-Telegram-Username") String username,
+            @RequestHeader(value = "X-Telegram-Username", required = false) String username,
             @Valid @RequestBody CreateProjectViaFrontendRequest request
     ) {
         ProjectResponse response = projectService.createProjectViaFrontend(telegramUserId, username, request);

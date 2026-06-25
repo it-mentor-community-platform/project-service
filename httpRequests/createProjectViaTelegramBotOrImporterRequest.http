@@ -8,8 +8,7 @@ Content-Type: application/json
   "github_repository_url": "https://github.com/zhukovsd/hangman",
   "programming_language": "Java",
   "roadmap_project": "HANGMAN",
-  "telegram_user_id": 124551251,
-  "telegram_username": "zhukovsd",
+  "author_telegram_username": "zhukovsd",
   "project_source_type": "TELEGRAM_BOT"
 }
 
@@ -22,12 +21,36 @@ Content-Type: application/json
   "github_repository_url": "https://github.com/zhukovsd/hangman",
   "programming_language": "Java",
   "roadmap_project": "HANGMAN",
-  "telegram_user_id": 124551251,
-  "telegram_username": "zhukovsd",
+  "author_telegram_username": "zhukovsd",
   "added_timestamp": 1765628000,
   "project_source_type": "DATA_IMPORTER"
 }
 
+### Успешное создание проекта через Телеграмм бота без поля author_telegram_username -  201 Created (Ошибка 409: Дубликат проекта - запустите дважды для проверки)
+# added_timestamp передастся в response как нынешнее значение,даже если на вход придет другой added_timestamp
+POST http://localhost:8084/api/project/internal/project
+Content-Type: application/json
+
+{
+  "author_telegram_user_id": 123,
+  "github_repository_url": "https://github.com/zhukovsd/hangman",
+  "programming_language": "Java",
+  "roadmap_project": "HANGMAN",
+  "project_source_type": "TELEGRAM_BOT"
+}
+
+### Успешное создание проекта через Data-Importer без поля author_telegram_username -  201 Created (Ошибка 409: Дубликат проекта - запустите дважды для проверки)
+POST http://localhost:8084/api/project/internal/project
+Content-Type: application/json
+
+{
+  "author_telegram_user_id": 123,
+  "github_repository_url": "https://github.com/zhukovsd/hangman",
+  "programming_language": "Java",
+  "roadmap_project": "HANGMAN",
+  "added_timestamp": 1765628000,
+  "project_source_type": "DATA_IMPORTER"
+}
 
 ### Ошибка 400: Пустое обязательное поле
 POST http://localhost:8084/api/project/internal/project
@@ -38,8 +61,7 @@ Content-Type: application/json
   "github_repository_url": "not-a-url",
   "programming_language": "Java",
   "roadmap_project": "SIMULATION",
-  "telegram_user_id": 124551251,
-  "telegram_username": "zhukovsd",
+  "author_telegram_username": "zhukovsd",
   "project_source_type": "TELEGRAM_BOT"
 }
 
@@ -51,8 +73,7 @@ Content-Type: application/json
   "github_repository_url": "https://github.com/zhukovsd/simulation-test-3",
   "programming_language": "Java",
   "roadmap_project": "SIMULATION",
-  "telegram_user_id": 124551251,
-  "telegram_username": "zhukovsd",
+  "author_telegram_username": "zhukovsd",
   "project_source_type": "TELEGRAM_BOT"
 }
 
@@ -65,8 +86,7 @@ Content-Type: application/json
   "github_repository_url": "https://github.com/zhukovsd/hangman",
   "programming_language": "Java",
   "roadmap_project": "HANGMAN",
-  "telegram_user_id": 124551251,
-  "telegram_username": "zhukovsd",
+  "author_telegram_username": "zhukovsd",
   "project_source_type": "INVALID_TYPE"
 }
 
@@ -79,7 +99,6 @@ Content-Type: application/json
   "github_repository_url": "https://github.com/zhukovsd/unknown-project",
   "programming_language": "Java",
   "roadmap_project": "UNKNOWN-PROJECT",
-  "telegram_user_id": 124551251,
-  "telegram_username": "zhukovsd",
+  "author_telegram_username": "zhukovsd",
   "project_source_type": "TELEGRAM_BOT"
 }

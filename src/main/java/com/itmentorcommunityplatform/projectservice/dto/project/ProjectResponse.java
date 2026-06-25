@@ -1,4 +1,4 @@
-package com.itmentorcommunityplatform.projectservice.dto;
+package com.itmentorcommunityplatform.projectservice.dto.project;
 
 import com.fasterxml.jackson.annotation.JsonProperty;
 import com.itmentorcommunityplatform.projectservice.model.RoadmapProject;

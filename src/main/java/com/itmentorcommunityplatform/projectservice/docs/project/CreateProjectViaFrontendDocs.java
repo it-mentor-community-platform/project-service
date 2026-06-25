@@ -54,7 +54,7 @@ import java.lang.annotation.Target;
 )
 @ApiResponses(value = {
         @ApiResponse(
-                responseCode = "200",
+                responseCode = "201",
                 description = "Project successfully created",
                 content = @Content(
                         mediaType = "application/json",
@@ -114,14 +114,6 @@ import java.lang.annotation.Target;
                                         value = """
                                                 {
                                                   "message": "Missing required header: X-Telegram-User-Id"
-                                                }
-                                                """
-                                ),
-                                @ExampleObject(
-                                        name = "Missing X-Telegram-Username header",
-                                        value = """
-                                                {
-                                                  "message": "Missing required header: X-Telegram-Username"
                                                 }
                                                 """
                                 ),

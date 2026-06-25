@@ -1,8 +1,8 @@
 package com.itmentorcommunityplatform.projectservice.service;
 
-import com.itmentorcommunityplatform.projectservice.dto.CreateProjectViaFrontendRequest;
-import com.itmentorcommunityplatform.projectservice.dto.CreateProjectViaTelegramBotOrImportRequest;
-import com.itmentorcommunityplatform.projectservice.dto.ProjectResponse;
+import com.itmentorcommunityplatform.projectservice.dto.project.CreateProjectViaFrontendRequest;
+import com.itmentorcommunityplatform.projectservice.dto.project.CreateProjectViaTelegramBotOrImportRequest;
+import com.itmentorcommunityplatform.projectservice.dto.project.ProjectResponse;
 import com.itmentorcommunityplatform.projectservice.kafka.ProjectEventProducer;
 import com.itmentorcommunityplatform.projectservice.mapper.ProjectMapper;
 import com.itmentorcommunityplatform.projectservice.model.DataSourceType;
@@ -59,7 +59,9 @@ public class ProjectService {
     public ProjectResponse createProjectViaTelegramBotOrImporter(
             CreateProjectViaTelegramBotOrImportRequest request
     ) {
+        Long requestedTimestamp = request.addedTimestamp();
         long addedTimestamp = request.dataSourceType() == DataSourceType.DATA_IMPORTER
+                && requestedTimestamp != null
                 ? request.addedTimestamp()
                 : Instant.now().getEpochSecond();
 

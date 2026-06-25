@@ -21,3 +21,4 @@ spring:
 kafka:
   topic:
     projects-project-created: staging.projects.project.created
+    notifications-students-review-submitted: staging.notifications.students.review.submitted
