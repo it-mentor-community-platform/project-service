@@ -29,12 +29,8 @@ public record CreateProjectViaTelegramBotOrImportRequest(
         @JsonProperty("roadmap_project")
         RoadmapProject roadmapProject,
 
-        @NotNull
-        @JsonProperty("telegram_user_id")
-        Long telegramUserId,
-
         @NotBlank
-        @JsonProperty("telegram_username")
+        @JsonProperty("author_telegram_username")
         String telegramUsername,
 
         @JsonProperty("added_timestamp")
