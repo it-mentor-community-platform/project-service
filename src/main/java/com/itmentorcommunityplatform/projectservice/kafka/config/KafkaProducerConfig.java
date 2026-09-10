@@ -17,6 +17,9 @@ public class KafkaProducerConfig {
     @Value("${kafka.topic.notifications-students-review-submitted}")
     private String reviewStudentNotificationTopic;
 
+    @Value("${kafka.topic.reviews-review-created}")
+    private String reviewsReviewCreatedTopic;
+
     @Bean
     public NewTopic projectsProjectCreatedTopic() {
         return TopicBuilder.name(projectsProjectCreatedTopic)
@@ -26,6 +29,12 @@ public class KafkaProducerConfig {
     @Bean
     public NewTopic reviewStudentNotificationTopic() {
         return TopicBuilder.name(reviewStudentNotificationTopic)
+                .build();
+    }
+
+    @Bean
+    public NewTopic reviewReviewCreatedTopic() {
+        return TopicBuilder.name(reviewsReviewCreatedTopic)
                 .build();
     }
 
