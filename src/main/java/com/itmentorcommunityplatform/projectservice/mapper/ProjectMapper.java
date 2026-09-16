@@ -1,9 +1,9 @@
 package com.itmentorcommunityplatform.projectservice.mapper;
 
-import com.itmentorcommunityplatform.projectservice.dto.kafka.ProjectCreatedEvent;
 import com.itmentorcommunityplatform.projectservice.dto.request.project.CreateProjectViaFrontendRequest;
 import com.itmentorcommunityplatform.projectservice.dto.request.project.CreateProjectViaTelegramBotOrImportRequest;
 import com.itmentorcommunityplatform.projectservice.dto.response.ProjectResponse;
+import com.itmentorcommunityplatform.projectservice.kafka.ProjectCreatedEvent;
 import com.itmentorcommunityplatform.projectservice.model.DataSourceType;
 import com.itmentorcommunityplatform.projectservice.model.Project;
 import org.mapstruct.Mapper;

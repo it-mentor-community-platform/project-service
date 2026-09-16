@@ -1,4 +1,4 @@
-package com.itmentorcommunityplatform.projectservice.dto.kafka;
+package com.itmentorcommunityplatform.projectservice.kafka;
 
 import com.fasterxml.jackson.databind.PropertyNamingStrategies;
 import com.fasterxml.jackson.databind.annotation.JsonNaming;
