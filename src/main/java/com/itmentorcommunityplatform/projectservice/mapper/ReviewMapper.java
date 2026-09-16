@@ -1,7 +1,7 @@
 package com.itmentorcommunityplatform.projectservice.mapper;
 
-import com.itmentorcommunityplatform.projectservice.dto.review.ReviewResponse;
-import com.itmentorcommunityplatform.projectservice.kafka.ReviewStudentNotificationEvent;
+import com.itmentorcommunityplatform.projectservice.dto.kafka.ReviewStudentNotificationEvent;
+import com.itmentorcommunityplatform.projectservice.dto.response.ReviewResponse;
 import com.itmentorcommunityplatform.projectservice.model.Project;
 import com.itmentorcommunityplatform.projectservice.model.Review;
 import org.mapstruct.Mapper;

@@ -1,11 +1,11 @@
 package com.itmentorcommunityplatform.projectservice.controller;
 
-import com.itmentorcommunityplatform.projectservice.docs.review.CreateReviewViaImporter;
-import com.itmentorcommunityplatform.projectservice.dto.review.CreateReviewViaFrontendRequest;
-import com.itmentorcommunityplatform.projectservice.dto.review.CreateReviewViaImporterRequest;
-import com.itmentorcommunityplatform.projectservice.dto.review.ReviewResponse;
-import com.itmentorcommunityplatform.projectservice.service.ReviewService;
 import com.itmentorcommunityplatform.projectservice.docs.review.CreateReviewViaFrontendDocs;
+import com.itmentorcommunityplatform.projectservice.docs.review.CreateReviewViaImporter;
+import com.itmentorcommunityplatform.projectservice.dto.request.review.CreateReviewViaFrontendRequest;
+import com.itmentorcommunityplatform.projectservice.dto.request.review.CreateReviewViaImporterRequest;
+import com.itmentorcommunityplatform.projectservice.dto.response.ReviewResponse;
+import com.itmentorcommunityplatform.projectservice.service.ReviewService;
 import jakarta.validation.Valid;
 import lombok.RequiredArgsConstructor;
 import org.springframework.http.HttpStatus;

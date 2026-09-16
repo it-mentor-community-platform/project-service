@@ -1,5 +1,6 @@
 package com.itmentorcommunityplatform.projectservice.kafka;
 
+import com.itmentorcommunityplatform.projectservice.dto.kafka.ReviewCreatedEvent;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.beans.factory.annotation.Value;
@@ -16,7 +17,7 @@ public class ReviewEventProducer {
     @Value("${kafka.topic.reviews-review-created}")
     private String reviewsReviewCreatedTopic;
 
-    public void sendProjectCreated(ReviewCreatedEvent event) {
+    public void sendReviewCreated(ReviewCreatedEvent event) {
         kafkaTemplate.send(reviewsReviewCreatedTopic, event)
                 .whenComplete((result, ex) -> {
                     if (ex == null) {

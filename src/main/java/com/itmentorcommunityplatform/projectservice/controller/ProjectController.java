@@ -2,9 +2,9 @@ package com.itmentorcommunityplatform.projectservice.controller;
 
 import com.itmentorcommunityplatform.projectservice.docs.project.CreateProjectViaFrontendDocs;
 import com.itmentorcommunityplatform.projectservice.docs.project.CreateProjectViaTelegramBotOrImporterDocs;
-import com.itmentorcommunityplatform.projectservice.dto.project.CreateProjectViaFrontendRequest;
-import com.itmentorcommunityplatform.projectservice.dto.project.CreateProjectViaTelegramBotOrImportRequest;
-import com.itmentorcommunityplatform.projectservice.dto.project.ProjectResponse;
+import com.itmentorcommunityplatform.projectservice.dto.request.project.CreateProjectViaFrontendRequest;
+import com.itmentorcommunityplatform.projectservice.dto.request.project.CreateProjectViaTelegramBotOrImportRequest;
+import com.itmentorcommunityplatform.projectservice.dto.response.ProjectResponse;
 import com.itmentorcommunityplatform.projectservice.service.ProjectService;
 import jakarta.validation.Valid;
 import lombok.RequiredArgsConstructor;

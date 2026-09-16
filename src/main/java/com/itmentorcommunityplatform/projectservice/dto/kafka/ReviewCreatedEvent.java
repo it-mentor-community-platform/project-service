@@ -1,8 +1,8 @@
-package com.itmentorcommunityplatform.projectservice.kafka;
+package com.itmentorcommunityplatform.projectservice.dto.kafka;
 
 import com.fasterxml.jackson.databind.PropertyNamingStrategies;
 import com.fasterxml.jackson.databind.annotation.JsonNaming;
-import com.itmentorcommunityplatform.projectservice.dto.project.ProjectResponse;
+import com.itmentorcommunityplatform.projectservice.dto.response.ProjectResponse;
 import com.itmentorcommunityplatform.projectservice.model.DataSourceType;
 
 @JsonNaming(PropertyNamingStrategies.SnakeCaseStrategy.class)

@@ -1,8 +1,8 @@
 package com.itmentorcommunityplatform.projectservice.service;
 
-import com.itmentorcommunityplatform.projectservice.dto.review.CreateReviewViaFrontendRequest;
-import com.itmentorcommunityplatform.projectservice.dto.review.CreateReviewViaImporterRequest;
-import com.itmentorcommunityplatform.projectservice.dto.review.ReviewResponse;
+import com.itmentorcommunityplatform.projectservice.dto.request.review.CreateReviewViaFrontendRequest;
+import com.itmentorcommunityplatform.projectservice.dto.request.review.CreateReviewViaImporterRequest;
+import com.itmentorcommunityplatform.projectservice.dto.response.ReviewResponse;
 import com.itmentorcommunityplatform.projectservice.exception.ProjectNotFoundException;
 import com.itmentorcommunityplatform.projectservice.kafka.ReviewStudentNotificationEventProducer;
 import com.itmentorcommunityplatform.projectservice.mapper.ReviewMapper;
