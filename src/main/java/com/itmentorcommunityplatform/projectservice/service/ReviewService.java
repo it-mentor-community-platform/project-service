@@ -11,6 +11,7 @@ import com.itmentorcommunityplatform.projectservice.model.Project;
 import com.itmentorcommunityplatform.projectservice.model.Review;
 import com.itmentorcommunityplatform.projectservice.repository.ProjectRepository;
 import com.itmentorcommunityplatform.projectservice.repository.ReviewRepository;
+import com.itmentorcommunityplatform.projectservice.util.TelegramUrlBuilder;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.stereotype.Service;
@@ -30,7 +31,8 @@ public class ReviewService {
 
     public ReviewResponse createReviewViaFrontend(
             CreateReviewViaFrontendRequest request,
-            Long reviewerTelegramUserId
+            Long reviewerTelegramUserId,
+            String reviewerTelegramUsername
     ) {
         String projectGithubRepositoryUrl = request.projectGithubRepositoryUrl();
         log.info(
@@ -62,12 +64,15 @@ public class ReviewService {
 
         reviewStudentNotificationProducer.sendReviewStudentNotification(
                 reviewMapper.toNotificationEvent(savedReview, project));
-        reviewEventProducer.sendReviewCreated(reviewMapper.toEvent(savedReview, project));
+        reviewEventProducer.sendReviewCreated(reviewMapper.toEvent(savedReview, project,
+                TelegramUrlBuilder.build(reviewerTelegramUsername)));
 
         return reviewMapper.toReviewResponse(savedReview, project);
     }
 
-    public ReviewResponse createReviewViaImporter(CreateReviewViaImporterRequest request) {
+    public ReviewResponse createReviewViaImporter(
+            CreateReviewViaImporterRequest request,
+            String reviewerTelegramUsername) {
         String projectGithubRepositoryUrl = request.projectGithubRepositoryUrl();
         String reviewUrl = request.reviewUrl();
         long reviewerTelegramUserId = request.reviewerTelegramUserId();
@@ -100,7 +105,9 @@ public class ReviewService {
                 reviewerTelegramUserId
         );
 
-        reviewEventProducer.sendReviewCreated(reviewMapper.toEvent(savedReview, project));
+        reviewEventProducer.sendReviewCreated(reviewMapper.toEvent(
+                savedReview, project,
+                TelegramUrlBuilder.build(reviewerTelegramUsername)));
 
         return reviewMapper.toReviewResponse(savedReview, project);
     }

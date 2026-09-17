@@ -39,9 +39,10 @@ public interface ReviewMapper {
 
     @Mapping(target = "id", source = "review.id")
     @Mapping(target = "reviewerTelegramUserId", source = "review.reviewerTelegramUserId")
+    @Mapping(target = "reviewerTelegramProfileUrl", source = "reviewerTelegramProfileId")
     @Mapping(target = "url", source = "review.url")
     @Mapping(target = "addedTimestamp", source = "review.addedTimestamp")
     @Mapping(target = "project", source = "project")
-    ReviewCreatedEvent toEvent(Review review, Project project);
+    ReviewCreatedEvent toEvent(Review review, Project project, String reviewTelegramProfileUrl);
 
 }

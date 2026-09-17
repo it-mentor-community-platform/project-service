@@ -23,11 +23,13 @@ public class ReviewController {
     @CreateReviewViaFrontendDocs
     public ResponseEntity<ReviewResponse> createReviewViaFrontend(
             @RequestHeader("X-Telegram-User-Id") Long reviewerTelegramUserId,
+            @RequestHeader("X-Telegram-Username") String reviewerTelegramUsername,
             @Valid @RequestBody CreateReviewViaFrontendRequest request
     ) {
         ReviewResponse response = reviewService.createReviewViaFrontend(
                 request,
-                reviewerTelegramUserId
+                reviewerTelegramUserId,
+                reviewerTelegramUsername
         );
 
         return ResponseEntity.status(HttpStatus.CREATED).body(response);
@@ -36,9 +38,10 @@ public class ReviewController {
     @PostMapping("/internal/review")
     @CreateReviewViaImporter
     public ResponseEntity<ReviewResponse> createProjectViaImporter(
+            @RequestHeader("X-Telegram-Username") String reviewerTelegramUsername,
             @Valid @RequestBody CreateReviewViaImporterRequest request
     ) {
-        ReviewResponse response = reviewService.createReviewViaImporter(request);
+        ReviewResponse response = reviewService.createReviewViaImporter(request, reviewerTelegramUsername);
         return ResponseEntity.status(HttpStatus.CREATED).body(response);
     }
 
