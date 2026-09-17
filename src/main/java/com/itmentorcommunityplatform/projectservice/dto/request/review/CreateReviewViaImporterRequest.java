@@ -27,6 +27,9 @@ public record CreateReviewViaImporterRequest(
         @JsonProperty("reviewer_telegram_user_id")
         Long reviewerTelegramUserId,
 
+        @JsonProperty("reviewer_telegram_profile_url")
+        String reviewerTelegramProfileUrl,
+
         @JsonProperty("added_timestamp")
         Long addedTimestamp
 ) {

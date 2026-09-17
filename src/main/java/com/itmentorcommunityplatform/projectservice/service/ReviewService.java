@@ -71,8 +71,7 @@ public class ReviewService {
     }
 
     public ReviewResponse createReviewViaImporter(
-            CreateReviewViaImporterRequest request,
-            String reviewerTelegramUsername) {
+            CreateReviewViaImporterRequest request) {
         String projectGithubRepositoryUrl = request.projectGithubRepositoryUrl();
         String reviewUrl = request.reviewUrl();
         long reviewerTelegramUserId = request.reviewerTelegramUserId();
@@ -107,7 +106,7 @@ public class ReviewService {
 
         reviewEventProducer.sendReviewCreated(reviewMapper.toEvent(
                 savedReview, project,
-                TelegramUrlBuilder.build(reviewerTelegramUsername)));
+                request.reviewerTelegramProfileUrl()));
 
         return reviewMapper.toReviewResponse(savedReview, project);
     }

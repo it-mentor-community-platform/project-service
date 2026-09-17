@@ -38,10 +38,9 @@ public class ReviewController {
     @PostMapping("/internal/review")
     @CreateReviewViaImporter
     public ResponseEntity<ReviewResponse> createProjectViaImporter(
-            @RequestHeader("X-Telegram-Username") String reviewerTelegramUsername,
             @Valid @RequestBody CreateReviewViaImporterRequest request
     ) {
-        ReviewResponse response = reviewService.createReviewViaImporter(request, reviewerTelegramUsername);
+        ReviewResponse response = reviewService.createReviewViaImporter(request);
         return ResponseEntity.status(HttpStatus.CREATED).body(response);
     }
 
