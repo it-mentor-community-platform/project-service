@@ -4,7 +4,8 @@ import com.itmentorcommunityplatform.projectservice.dto.request.review.CreateRev
 import com.itmentorcommunityplatform.projectservice.dto.request.review.CreateReviewViaImporterRequest;
 import com.itmentorcommunityplatform.projectservice.dto.response.ReviewResponse;
 import com.itmentorcommunityplatform.projectservice.exception.ProjectNotFoundException;
-import com.itmentorcommunityplatform.projectservice.kafka.ReviewStudentNotificationEventProducer;
+import com.itmentorcommunityplatform.projectservice.kafka.producer.ReviewEventProducer;
+import com.itmentorcommunityplatform.projectservice.kafka.producer.ReviewStudentNotificationEventProducer;
 import com.itmentorcommunityplatform.projectservice.mapper.ReviewMapper;
 import com.itmentorcommunityplatform.projectservice.model.Project;
 import com.itmentorcommunityplatform.projectservice.model.Review;
@@ -25,6 +26,7 @@ public class ReviewService {
     private final ReviewRepository reviewRepository;
     private final ReviewMapper reviewMapper;
     private final ReviewStudentNotificationEventProducer reviewStudentNotificationProducer;
+    private final ReviewEventProducer reviewEventProducer;
 
     public ReviewResponse createReviewViaFrontend(
             CreateReviewViaFrontendRequest request,
@@ -58,7 +60,9 @@ public class ReviewService {
                 reviewerTelegramUserId
         );
 
-        reviewStudentNotificationProducer.sendReviewStudentNotification(reviewMapper.toEvent(savedReview, project));
+        reviewStudentNotificationProducer.sendReviewStudentNotification(
+                reviewMapper.toNotificationEvent(savedReview, project));
+        reviewEventProducer.sendReviewCreated(reviewMapper.toEvent(savedReview, project));
 
         return reviewMapper.toReviewResponse(savedReview, project);
     }
@@ -95,6 +99,8 @@ public class ReviewService {
                 project.getId(),
                 reviewerTelegramUserId
         );
+
+        reviewEventProducer.sendReviewCreated(reviewMapper.toEvent(savedReview, project));
 
         return reviewMapper.toReviewResponse(savedReview, project);
     }

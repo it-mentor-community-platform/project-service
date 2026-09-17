@@ -1,5 +1,6 @@
-package com.itmentorcommunityplatform.projectservice.kafka;
+package com.itmentorcommunityplatform.projectservice.kafka.producer;
 
+import com.itmentorcommunityplatform.projectservice.kafka.ProjectCreatedEvent;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.beans.factory.annotation.Value;
@@ -9,15 +10,15 @@ import org.springframework.stereotype.Service;
 @Service
 @RequiredArgsConstructor
 @Slf4j
-public class ReviewEventProducer {
+public class ProjectEventProducer {
 
     private final KafkaTemplate<String, Object> kafkaTemplate;
 
-    @Value("${kafka.topic.reviews-review-created}")
-    private String reviewsReviewCreatedTopic;
+    @Value("${kafka.topic.projects-project-created}")
+    private String projectsProjectCreatedTopic;
 
-    public void sendReviewCreated(ReviewCreatedEvent event) {
-        kafkaTemplate.send(reviewsReviewCreatedTopic, event)
+    public void sendProjectCreated(ProjectCreatedEvent event) {
+        kafkaTemplate.send(projectsProjectCreatedTopic, event)
                 .whenComplete((result, ex) -> {
                     if (ex == null) {
                         log.info("Event sent to partition {}",
