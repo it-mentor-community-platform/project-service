@@ -23,7 +23,7 @@ public class ReviewController {
     @CreateReviewViaFrontendDocs
     public ResponseEntity<ReviewResponse> createReviewViaFrontend(
             @RequestHeader("X-Telegram-User-Id") Long reviewerTelegramUserId,
-            @RequestHeader("X-Telegram-Username") String reviewerTelegramUsername,
+            @RequestHeader(value = "X-Telegram-Username", required = false) String reviewerTelegramUsername,
             @Valid @RequestBody CreateReviewViaFrontendRequest request
     ) {
         ReviewResponse response = reviewService.createReviewViaFrontend(
