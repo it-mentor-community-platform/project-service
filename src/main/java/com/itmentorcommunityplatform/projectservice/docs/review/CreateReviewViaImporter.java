@@ -26,6 +26,7 @@ import java.lang.annotation.Target;
                 - `project_github_repository_url` — GitHub repository URL
                 - `review_url` — URL of the review
                 - `reviewer_telegram_user_id` — Telegram ID of the reviewer author
+                - `reviewer_telegram_profile_url` - link to reviewer telegram. Optional
                 - `added_timestamp` — Review creation timestamp in Unix epoch seconds. Optional;
                 """,
         requestBody = @RequestBody(
@@ -39,6 +40,7 @@ import java.lang.annotation.Target;
                                                       "project_github_repository_url": "https://github.com/test/simulation",
                                                       "review_url": "https://github.com/user/review-test/pull/1",
                                                       "reviewer_telegram_user_id": 123456,
+                                                      "reviewer_telegram_profile_url": "https://t.me/Raketa4000",
                                                       "added_timestamp": 123
                                                     }
                                                 """
