@@ -7,6 +7,7 @@ import com.itmentorcommunityplatform.projectservice.exception.ProjectNotFoundExc
 import com.itmentorcommunityplatform.projectservice.kafka.producer.ReviewEventProducer;
 import com.itmentorcommunityplatform.projectservice.kafka.producer.ReviewStudentNotificationEventProducer;
 import com.itmentorcommunityplatform.projectservice.mapper.ReviewMapper;
+import com.itmentorcommunityplatform.projectservice.model.DataSourceType;
 import com.itmentorcommunityplatform.projectservice.model.Project;
 import com.itmentorcommunityplatform.projectservice.model.Review;
 import com.itmentorcommunityplatform.projectservice.repository.ProjectRepository;
@@ -64,8 +65,12 @@ public class ReviewService {
 
         reviewStudentNotificationProducer.sendReviewStudentNotification(
                 reviewMapper.toNotificationEvent(savedReview, project));
-        reviewEventProducer.sendReviewCreated(reviewMapper.toEvent(savedReview, project,
-                TelegramUrlBuilder.build(reviewerTelegramUsername)));
+        reviewEventProducer.sendReviewCreated(reviewMapper.toEvent(
+                savedReview,
+                project,
+                TelegramUrlBuilder.build(reviewerTelegramUsername),
+                DataSourceType.FRONTEND)
+        );
 
         return reviewMapper.toReviewResponse(savedReview, project);
     }
@@ -105,8 +110,11 @@ public class ReviewService {
         );
 
         reviewEventProducer.sendReviewCreated(reviewMapper.toEvent(
-                savedReview, project,
-                request.reviewerTelegramProfileUrl()));
+                savedReview,
+                project,
+                request.reviewerTelegramProfileUrl(),
+                DataSourceType.DATA_IMPORTER)
+        );
 
         return reviewMapper.toReviewResponse(savedReview, project);
     }

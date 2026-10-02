@@ -7,6 +7,10 @@ public class TelegramUrlBuilder {
     private final String TELEGRAM_URL_BASE = "https://t.me/";
 
     public String build(String username) {
+        if (username == null) {
+            return null;
+        }
+
         validateBlank(username);
         return TELEGRAM_URL_BASE +
                 (username.startsWith("/") || username.startsWith("@") ?
@@ -14,7 +18,7 @@ public class TelegramUrlBuilder {
     }
 
     private void validateBlank(String username) {
-        if (username == null || username.isBlank()) {
+        if (username.isBlank()) {
             throw new IllegalArgumentException("Username must not be blank");
         }
     }
