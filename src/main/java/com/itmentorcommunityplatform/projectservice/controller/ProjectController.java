@@ -2,6 +2,7 @@ package com.itmentorcommunityplatform.projectservice.controller;
 
 import com.itmentorcommunityplatform.projectservice.docs.project.CreateProjectViaFrontendDocs;
 import com.itmentorcommunityplatform.projectservice.docs.project.CreateProjectViaTelegramBotOrImporterDocs;
+import com.itmentorcommunityplatform.projectservice.docs.project.GetProjectsSummaryDocs;
 import com.itmentorcommunityplatform.projectservice.dto.request.project.CreateProjectViaFrontendRequest;
 import com.itmentorcommunityplatform.projectservice.dto.request.project.CreateProjectViaTelegramBotOrImportRequest;
 import com.itmentorcommunityplatform.projectservice.dto.response.ProjectResponse;
@@ -22,6 +23,7 @@ public class ProjectController {
 
 
     @GetMapping("/projects/my/summary")
+    @GetProjectsSummaryDocs
     public ResponseEntity<ProjectsSummaryResponse> getProjectsToSummary(
             @RequestHeader("X-Telegram-User-Id") Long telegramUserId,
             @RequestHeader("X-User-Roles") String userRoles
