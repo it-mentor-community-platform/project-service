@@ -1,4 +1,4 @@
-### Успешное создание ревью
+### Успешное создание ревью без reviewer_telegram_profile_url, но с added_timestamp (необязательные поля)
 # Перед запуском: проект с этим github_repository_url уже должен существовать в БД
 POST http://localhost:8084/api/project/internal/review
 Content-Type: application/json
@@ -10,7 +10,7 @@ Content-Type: application/json
   "added_timestamp": 123
 }
 
-### Успешное создание ревью c null added timestamp
+### Успешное создание ревью с reviewer_telegram_profile_url и added_timestamp (необязательные поля)
 # Перед запуском: проект с этим github_repository_url уже должен существовать в БД
 POST http://localhost:8084/api/project/internal/review
 Content-Type: application/json
@@ -18,7 +18,21 @@ Content-Type: application/json
 {
   "project_github_repository_url": "https://github.com/test-user/project-review-test",
   "review_url": "https://github.com/test-user/project-review-test/pull/1",
-  "reviewer_telegram_user_id": 123456
+  "reviewer_telegram_user_id": 123456,
+  "reviewer_telegram_profile_url": "https://t.me/Raketa4000",
+  "added_timestamp": 123
+}
+
+### Успешное создание ревью с reviewer_telegram_profile_url, но без added_timestamp (необязательные поля)
+# Перед запуском: проект с этим github_repository_url уже должен существовать в БД
+POST http://localhost:8084/api/project/internal/review
+Content-Type: application/json
+
+{
+  "project_github_repository_url": "https://github.com/test-user/project-review-test",
+  "review_url": "https://github.com/test-user/project-review-test/pull/1",
+  "reviewer_telegram_user_id": 123456,
+  "reviewer_telegram_profile_url": "https://t.me/Raketa4000"
 }
 
 ### Ошибка 404: проект не найден

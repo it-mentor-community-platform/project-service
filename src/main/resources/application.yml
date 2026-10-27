@@ -21,6 +21,7 @@ kafka:
   topic:
     projects-project-created: projects.project.created
     notifications-students-review-submitted: notifications.students.review.submitted
+    reviews-review-created: reviews.review.created
 
 management:
   metrics:

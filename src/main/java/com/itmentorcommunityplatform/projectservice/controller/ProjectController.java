@@ -2,23 +2,48 @@ package com.itmentorcommunityplatform.projectservice.controller;
 
 import com.itmentorcommunityplatform.projectservice.docs.project.CreateProjectViaFrontendDocs;
 import com.itmentorcommunityplatform.projectservice.docs.project.CreateProjectViaTelegramBotOrImporterDocs;
-import com.itmentorcommunityplatform.projectservice.dto.project.CreateProjectViaFrontendRequest;
-import com.itmentorcommunityplatform.projectservice.dto.project.CreateProjectViaTelegramBotOrImportRequest;
-import com.itmentorcommunityplatform.projectservice.dto.project.ProjectResponse;
+import com.itmentorcommunityplatform.projectservice.docs.project.GetProjectsSummaryDocs;
+import com.itmentorcommunityplatform.projectservice.dto.request.project.CreateProjectViaFrontendRequest;
+import com.itmentorcommunityplatform.projectservice.dto.request.project.CreateProjectViaTelegramBotOrImportRequest;
+import com.itmentorcommunityplatform.projectservice.dto.response.ProjectResponse;
+import com.itmentorcommunityplatform.projectservice.dto.response.ProjectsSummaryResponse;
+import com.itmentorcommunityplatform.projectservice.exception.AccessDeniedException;
 import com.itmentorcommunityplatform.projectservice.service.ProjectService;
 import jakarta.validation.Valid;
 import lombok.RequiredArgsConstructor;
+import lombok.extern.slf4j.Slf4j;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 
+import java.util.List;
+
 @RestController
 @RequestMapping("/api/project")
 @RequiredArgsConstructor
+@Slf4j
 public class ProjectController {
 
     private final ProjectService projectService;
 
+    private static final String ROLE_STUDENT = "STUDENT";
+
+
+    @GetMapping("/projects/my/summary")
+    @GetProjectsSummaryDocs
+    public ResponseEntity<ProjectsSummaryResponse> getProjectsToSummary(
+            @RequestHeader("X-Telegram-User-Id") Long telegramUserId,
+            @RequestHeader("X-User-Roles") List<String> userRoles
+    ) {
+
+        if (!userRoles.contains(ROLE_STUDENT)) {
+            log.warn("User is not a student");
+            throw new AccessDeniedException("User does not have STUDENT role");
+        }
+
+        ProjectsSummaryResponse response = projectService.getProjectsSummaryToUserId(telegramUserId);
+        return ResponseEntity.status(HttpStatus.OK).body(response);
+    }
 
     @PostMapping("/project")
     @CreateProjectViaFrontendDocs

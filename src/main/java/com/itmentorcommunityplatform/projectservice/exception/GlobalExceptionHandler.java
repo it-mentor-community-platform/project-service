@@ -54,6 +54,14 @@ public class GlobalExceptionHandler {
                 .body(new ErrorResponse(errorMessage));
     }
 
+    @ExceptionHandler(AccessDeniedException.class)
+    public ResponseEntity<ErrorResponse> handleAccessDeniedException(AccessDeniedException ex) {
+        log.warn("Access denied: {}", ex.getMessage());
+        return ResponseEntity
+                .status(HttpStatus.FORBIDDEN)
+                .body(new ErrorResponse(ex.getMessage()));
+    }
+
     @ExceptionHandler(HttpMessageNotReadableException.class)
     public ResponseEntity<ErrorResponse> handleJsonParseException(HttpMessageNotReadableException ex) {
         log.warn("JSON parse error: {}", ex.getMessage());
