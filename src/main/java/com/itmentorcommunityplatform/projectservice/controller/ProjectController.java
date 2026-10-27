@@ -24,7 +24,7 @@ public class ProjectController {
     @GetMapping("/projects/my/summary")
     public ResponseEntity<ProjectsSummaryResponse> getProjectsToSummary(
             @RequestHeader("X-Telegram-User-Id") Long telegramUserId,
-            @RequestHeader(value = "X-User-Roles", required = false) String userRoles
+            @RequestHeader("X-User-Roles") String userRoles
     ) {
         ProjectsSummaryResponse response = projectService.getProjectsSummaryToUserId(telegramUserId, userRoles);
         return ResponseEntity.status(HttpStatus.OK).body(response);
