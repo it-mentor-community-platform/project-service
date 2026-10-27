@@ -4,7 +4,6 @@ import com.itmentorcommunityplatform.projectservice.dto.request.project.CreatePr
 import com.itmentorcommunityplatform.projectservice.dto.request.project.CreateProjectViaTelegramBotOrImportRequest;
 import com.itmentorcommunityplatform.projectservice.dto.response.ProjectResponse;
 import com.itmentorcommunityplatform.projectservice.dto.response.ProjectsSummaryResponse;
-import com.itmentorcommunityplatform.projectservice.exception.AccessDeniedException;
 import com.itmentorcommunityplatform.projectservice.kafka.producer.ProjectEventProducer;
 import com.itmentorcommunityplatform.projectservice.mapper.ProjectMapper;
 import com.itmentorcommunityplatform.projectservice.model.DataSourceType;
@@ -17,10 +16,9 @@ import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
 import java.time.Instant;
-import java.util.LinkedHashSet;
-import java.util.Arrays;
 import java.util.Comparator;
 import java.util.LinkedHashMap;
+import java.util.LinkedHashSet;
 import java.util.List;
 import java.util.stream.Collectors;
 
@@ -37,16 +35,9 @@ public class ProjectService {
     private final Counter projectsCreatedViaTelegramBotCounter;
     private final Counter projectsCreatedViaImporterCounter;
 
-    private static final String ROLE_STUDENT = "STUDENT";
-
 
     @Transactional
-    public ProjectsSummaryResponse getProjectsSummaryToUserId(Long authorId, String userRoles) {
-
-        if (!isStudent(userRoles)) {
-            log.warn("User is not a student");
-            throw new AccessDeniedException("User does not have STUDENT role");
-        }
+    public ProjectsSummaryResponse getProjectsSummaryToUserId(Long authorId) {
 
         var projects = projectRepository.findAllByAuthorTelegramUserId(authorId);
         log.info("Found {} projects for authorId={}", projects.size(), authorId);
@@ -64,11 +55,6 @@ public class ProjectService {
                                 )
                         )
                 )));
-    }
-
-    private boolean isStudent(String userRoles) {
-        String[] roles = userRoles.toUpperCase().split(",");
-        return Arrays.asList(roles).contains(ROLE_STUDENT);
     }
 
     @Transactional
