@@ -5,6 +5,7 @@ import com.itmentorcommunityplatform.projectservice.docs.project.CreateProjectVi
 import com.itmentorcommunityplatform.projectservice.dto.request.project.CreateProjectViaFrontendRequest;
 import com.itmentorcommunityplatform.projectservice.dto.request.project.CreateProjectViaTelegramBotOrImportRequest;
 import com.itmentorcommunityplatform.projectservice.dto.response.ProjectResponse;
+import com.itmentorcommunityplatform.projectservice.dto.response.ProjectsSummaryResponse;
 import com.itmentorcommunityplatform.projectservice.service.ProjectService;
 import jakarta.validation.Valid;
 import lombok.RequiredArgsConstructor;
@@ -19,6 +20,15 @@ public class ProjectController {
 
     private final ProjectService projectService;
 
+
+    @GetMapping("/projects/my/summary")
+    public ResponseEntity<ProjectsSummaryResponse> getProjectsToSummary(
+            @RequestHeader("X-Telegram-User-Id") Long telegramUserId,
+            @RequestHeader(value = "X-User-Roles", required = false) String userRoles
+    ) {
+        ProjectsSummaryResponse response = projectService.getProjectsSummaryToUserId(telegramUserId, userRoles);
+        return ResponseEntity.status(HttpStatus.OK).body(response);
+    }
 
     @PostMapping("/project")
     @CreateProjectViaFrontendDocs
