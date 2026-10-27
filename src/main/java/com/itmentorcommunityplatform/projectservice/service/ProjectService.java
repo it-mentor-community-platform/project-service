@@ -17,8 +17,11 @@ import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
 import java.time.Instant;
+import java.util.LinkedHashSet;
 import java.util.Arrays;
+import java.util.Comparator;
 import java.util.LinkedHashMap;
+import java.util.List;
 import java.util.stream.Collectors;
 
 @Service
@@ -49,12 +52,16 @@ public class ProjectService {
         log.info("Found {} projects for authorId={}", projects.size(), authorId);
 
         return new ProjectsSummaryResponse(projects.stream()
+                .sorted(Comparator.comparing(Project::getAddedTimestamp))
                 .collect(Collectors.groupingBy(
                         Project::getRoadmapProject,
                         LinkedHashMap::new,
                         Collectors.mapping(
                                 Project::getProgrammingLanguage,
-                                Collectors.toList()
+                                Collectors.collectingAndThen(
+                                        Collectors.toCollection(LinkedHashSet::new),
+                                        List::copyOf
+                                )
                         )
                 )));
     }
