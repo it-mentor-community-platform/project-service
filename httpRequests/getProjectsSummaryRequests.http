@@ -1,0 +1,15 @@
+### Успешное получение краткого содержания по проектам пользователя 200 ОК
+GET http://localhost:8084/api/project/projects/my/summary
+X-Telegram-User-Id: 123456789
+X-User-Roles: STUDENT
+
+### Ошибка 403 - У пользователя нет роли STUDENT
+GET http://localhost:8084/api/project/projects/my/summary
+X-Telegram-User-Id: 123456789
+X-User-Roles: MENTOR
+
+### Ошибка 400 - отсутствует Telegram user ID
+GET http://localhost:8084/api/project/projects/my/summary
+X-User-Roles: STUDENT
+###
+
