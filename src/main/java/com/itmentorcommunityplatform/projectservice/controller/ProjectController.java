@@ -8,6 +8,7 @@ import com.itmentorcommunityplatform.projectservice.dto.request.project.CreatePr
 import com.itmentorcommunityplatform.projectservice.dto.response.ProjectResponse;
 import com.itmentorcommunityplatform.projectservice.dto.response.ProjectsSummaryResponse;
 import com.itmentorcommunityplatform.projectservice.exception.AccessDeniedException;
+import com.itmentorcommunityplatform.projectservice.model.RoadmapProject;
 import com.itmentorcommunityplatform.projectservice.service.ProjectService;
 import jakarta.validation.Valid;
 import lombok.RequiredArgsConstructor;
@@ -41,6 +42,21 @@ public class ProjectController {
         }
 
         ProjectsSummaryResponse response = projectService.getProjectsSummaryToUserId(telegramUserId);
+        return ResponseEntity.status(HttpStatus.OK).body(response);
+    }
+
+    @GetMapping("/projects/my")
+    public ResponseEntity<List<ProjectResponse>> getProjectImplementationsByProjectType(
+            @RequestHeader("X-Telegram-User-Id") Long telegramUserId,
+            @RequestHeader("X-User-Roles") List<String> userRoles,
+            @RequestParam(value = "roadmap_project") RoadmapProject roadmapProject
+    ) {
+        if (!userRoles.contains(ROLE_STUDENT)) {
+            log.warn("User is not a student");
+            throw new AccessDeniedException("User does not have STUDENT role");
+        }
+
+        List<ProjectResponse> response = projectService.getProjectImplementations(telegramUserId, roadmapProject);
         return ResponseEntity.status(HttpStatus.OK).body(response);
     }
 

@@ -8,6 +8,7 @@ import com.itmentorcommunityplatform.projectservice.kafka.producer.ProjectEventP
 import com.itmentorcommunityplatform.projectservice.mapper.ProjectMapper;
 import com.itmentorcommunityplatform.projectservice.model.DataSourceType;
 import com.itmentorcommunityplatform.projectservice.model.Project;
+import com.itmentorcommunityplatform.projectservice.model.RoadmapProject;
 import com.itmentorcommunityplatform.projectservice.repository.ProjectRepository;
 import io.micrometer.core.instrument.Counter;
 import lombok.RequiredArgsConstructor;
@@ -57,6 +58,18 @@ public class ProjectService {
                 )));
     }
 
+    public List<ProjectResponse> getProjectImplementations(
+            Long authorId,
+            RoadmapProject project
+    ) {
+        List<Project> projects
+                = projectRepository
+                .findAllByAuthorTelegramUserIdAndRoadmapProjectOrderByAddedTimestampDesc(authorId, project);
+        log.info("Found {} concrete projects of {} for authorId={}", projects.size(), project, authorId);
+
+        return projectMapper.toResponseList(projects);
+    }
+
     @Transactional
     public ProjectResponse createProjectViaFrontend(
             Long authorId,
@@ -88,7 +101,7 @@ public class ProjectService {
     ) {
         Long requestedTimestamp = request.addedTimestamp();
         long addedTimestamp = request.dataSourceType() == DataSourceType.DATA_IMPORTER
-                              && requestedTimestamp != null
+                && requestedTimestamp != null
                 ? request.addedTimestamp()
                 : Instant.now().getEpochSecond();
 
