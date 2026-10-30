@@ -2,6 +2,7 @@ package com.itmentorcommunityplatform.projectservice.controller;
 
 import com.itmentorcommunityplatform.projectservice.docs.project.CreateProjectViaFrontendDocs;
 import com.itmentorcommunityplatform.projectservice.docs.project.CreateProjectViaTelegramBotOrImporterDocs;
+import com.itmentorcommunityplatform.projectservice.docs.project.GetProjectImplementationsDocs;
 import com.itmentorcommunityplatform.projectservice.docs.project.GetProjectsSummaryDocs;
 import com.itmentorcommunityplatform.projectservice.dto.request.project.CreateProjectViaFrontendRequest;
 import com.itmentorcommunityplatform.projectservice.dto.request.project.CreateProjectViaTelegramBotOrImportRequest;
@@ -46,6 +47,7 @@ public class ProjectController {
     }
 
     @GetMapping("/projects/my")
+    @GetProjectImplementationsDocs
     public ResponseEntity<List<ProjectResponse>> getProjectImplementationsByProjectType(
             @RequestHeader("X-Telegram-User-Id") Long telegramUserId,
             @RequestHeader("X-User-Roles") List<String> userRoles,
