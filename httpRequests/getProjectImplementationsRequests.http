@@ -1,0 +1,37 @@
+@roadmap_project_corect = SIMULATION
+@roadmap_project_wrong = banana123
+
+### 200 ОК - Успешное получение реализаций пользователя (они есть) - одного проекта (например, симуляции)
+### предусловие: должен быть проведен импорт данных (например, посредством дат импортера)
+### 395212293 - проверено: у него есть 3 проекта (окамл, джава, го) в симуляции
+GET http://localhost:8084/api/project/projects/my?roadmap_project={{roadmap_project_corect}}
+X-Telegram-User-Id: 395212293
+X-User-Roles: STUDENT
+
+### 200 ОК - Успешное получение реализаций пользователя (их нет) - одного проекта (например, симуляции)
+### предусловие: должен быть проведен импорт данных (например, посредством дат импортера)
+### 99999999 - проверено: у него нет проектов в симуляции
+GET http://localhost:8084/api/project/projects/my?roadmap_project={{roadmap_project_corect}}
+X-Telegram-User-Id: 99999999
+X-User-Roles: STUDENT
+
+### Ошибка 400 - параметр roadmap_project содержит неизвестный тип проекта
+GET http://localhost:8084/api/project/projects/my?roadmap_project={{roadmap_project_wrong}}
+X-Telegram-User-Id: 395212293
+X-User-Roles: STUDENT
+
+### Ошибка 400 - параметр roadmap_project не передан
+GET http://localhost:8084/api/project/projects/my
+X-Telegram-User-Id: 395212293
+X-User-Roles: STUDENT
+
+### Ошибка 400 - отсутствует Telegram user ID
+GET http://localhost:8084/api/project/projects/my?roadmap_project={{roadmap_project_corect}}
+X-User-Roles: STUDENT
+
+### Ошибка 403 - У пользователя нет роли STUDENT
+GET http://localhost:8084/api/project/projects/my?roadmap_project={{roadmap_project_corect}}
+X-Telegram-User-Id: 395212293
+X-User-Roles: MENTOR
+
+###

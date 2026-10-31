@@ -9,6 +9,8 @@ import com.itmentorcommunityplatform.projectservice.model.Project;
 import org.mapstruct.Mapper;
 import org.mapstruct.Mapping;
 
+import java.util.List;
+
 @Mapper(componentModel = "spring")
 public interface ProjectMapper {
 
@@ -17,6 +19,8 @@ public interface ProjectMapper {
     ProjectCreatedEvent toEvent(Project project, String telegramProfileUrl, DataSourceType sourceType);
 
     ProjectResponse toResponse(Project project);
+
+    List<ProjectResponse> toResponseList(List<Project> projects);
 
     @Mapping(target = "addedTimestamp", source = "addedTimestamp")
     @Mapping(target = "id", ignore = true)
