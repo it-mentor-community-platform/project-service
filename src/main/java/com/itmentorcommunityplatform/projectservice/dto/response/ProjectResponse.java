@@ -12,6 +12,7 @@ public record ProjectResponse(
         String githubRepositoryUrl,
         String programmingLanguage,
         RoadmapProject roadmapProject,
-        Long addedTimestamp
+        Long addedTimestamp,
+        String deploymentUrl
 ) {
 }

@@ -72,6 +72,14 @@ public class GlobalExceptionHandler {
                 .body(new ErrorResponse("Invalid request body"));
     }
 
+    @ExceptionHandler(InvalidInputException.class)
+    public ResponseEntity<ErrorResponse> handleInvalidInputException(InvalidInputException ex) {
+        log.warn("Input validation failed: {}", ex.getMessage());
+        return ResponseEntity
+                .status(HttpStatus.BAD_REQUEST)
+                .body(new ErrorResponse("Invalid input: " + ex.getMessage()));
+    }
+
     @ExceptionHandler(MissingRequestHeaderException.class)
     public ResponseEntity<ErrorResponse> handleMissingHeaderException(MissingRequestHeaderException ex) {
         log.warn("Missing header: {}", ex.getHeaderName());

@@ -8,7 +8,8 @@ X-User-Roles: STUDENT
 {
   "github_repository_url": "https://github.com/zhukovsd/currency-exchange-test",
   "programming_language": "Java",
-  "roadmap_project": "CURRENCY-EXCHANGE"
+  "roadmap_project": "CURRENCY-EXCHANGE",
+  "deployment_url": "http://example-deploy.ru/"
 }
 
 ### Успешное создание проекта без поля X-Telegram-Username 201 Created (Ошибка 409: Дубликат проекта - запустите дважды для проверки)
@@ -20,6 +21,19 @@ X-Telegram-User-Id: 123456789
   "github_repository_url": "https://github.com/zhukovsd/simulation-test-3",
   "programming_language": "Java",
   "roadmap_project": "SIMULATION"
+}
+
+### Успешное создание проекта без необязательного поля deployment_url 201 Created (Ошибка 409: Дубликат проекта - запустите дважды для проверки)
+POST http://localhost:8084/api/project/project
+Content-Type: application/json
+X-Telegram-User-Id: 123456789
+X-Telegram-Username: llllqqqqqqqqq
+X-User-Roles: STUDENT
+
+{
+  "github_repository_url": "https://github.com/zhukovsd/currency-exchange-test-0",
+  "programming_language": "Java",
+  "roadmap_project": "CURRENCY-EXCHANGE"
 }
 
 ### Ошибка 400: Невалидный URL
@@ -67,3 +81,30 @@ X-Telegram-User-Id: 123456789
   "roadmap_project": "UNKNOWN-PROJECT"
 }
 
+### Ошибка 400: Невалидное поле (deployment_url)
+POST http://localhost:8084/api/project/project
+Content-Type: application/json
+X-Telegram-User-Id: 123456789
+X-Telegram-Username: llllqqqqqqqqq
+X-User-Roles: STUDENT
+
+{
+  "github_repository_url": "https://github.com/zhukovsd/currency-exchange-test-0",
+  "programming_language": "Java",
+  "roadmap_project": "CURRENCY-EXCHANGE",
+  "deployment_url": "any-example-invalid-url.ru"
+}
+
+### Ошибка 400: Недопустимое поле (deployment_url) для текущего типа проекта
+POST http://localhost:8084/api/project/project
+Content-Type: application/json
+X-Telegram-User-Id: 123456789
+X-Telegram-Username: llllqqqqqqqqq
+X-User-Roles: STUDENT
+
+{
+  "github_repository_url": "https://github.com/zhukovsd/hangman",
+  "programming_language": "Java",
+  "roadmap_project": "HANGMAN",
+  "deployment_url": "http://deployed-hangman.com/"
+}
