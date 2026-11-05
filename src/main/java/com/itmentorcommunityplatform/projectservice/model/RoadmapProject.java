@@ -1,6 +1,7 @@
 package com.itmentorcommunityplatform.projectservice.model;
 
 import com.fasterxml.jackson.annotation.JsonCreator;
+import com.itmentorcommunityplatform.projectservice.exception.InvalidInputException;
 
 public enum RoadmapProject {
     HANGMAN,
@@ -27,7 +28,7 @@ public enum RoadmapProject {
             }
         }
 
-        throw new IllegalArgumentException("Unknown RoadmapProjectType: " + value);
+        throw new InvalidInputException("Unknown RoadmapProjectType: " + value);
     }
 
     public boolean supportsDeployment(){

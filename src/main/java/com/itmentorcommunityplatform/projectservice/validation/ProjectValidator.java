@@ -1,5 +1,6 @@
 package com.itmentorcommunityplatform.projectservice.validation;
 
+import com.itmentorcommunityplatform.projectservice.exception.InvalidInputException;
 import com.itmentorcommunityplatform.projectservice.model.RoadmapProject;
 import lombok.experimental.UtilityClass;
 
@@ -10,7 +11,7 @@ public final class ProjectValidator {
             return;
         }
         if (!roadmapProject.supportsDeployment()) {
-            throw new IllegalArgumentException("The project does not support deployment");
+            throw new InvalidInputException("The project does not support deployment");
         }
     }
 }
