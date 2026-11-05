@@ -11,6 +11,7 @@ import com.itmentorcommunityplatform.projectservice.dto.response.ProjectsSummary
 import com.itmentorcommunityplatform.projectservice.exception.AccessDeniedException;
 import com.itmentorcommunityplatform.projectservice.model.RoadmapProject;
 import com.itmentorcommunityplatform.projectservice.service.ProjectService;
+import com.itmentorcommunityplatform.projectservice.validation.ProjectValidator;
 import jakarta.validation.Valid;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
@@ -69,6 +70,7 @@ public class ProjectController {
             @RequestHeader(value = "X-Telegram-Username", required = false) String username,
             @Valid @RequestBody CreateProjectViaFrontendRequest request
     ) {
+        ProjectValidator.validateDeploymentUrl(request.deploymentUrl(), request.roadmapProject());
         ProjectResponse response = projectService.createProjectViaFrontend(telegramUserId, username, request);
         return ResponseEntity.status(HttpStatus.CREATED).body(response);
     }

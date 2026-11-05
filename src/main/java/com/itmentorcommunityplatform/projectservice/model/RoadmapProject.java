@@ -30,4 +30,14 @@ public enum RoadmapProject {
         throw new IllegalArgumentException("Unknown RoadmapProjectType: " + value);
     }
 
+    public boolean supportsDeployment(){
+        return switch (this) {
+            case CURRENCY_EXCHANGE,
+                 TENNIS_SCOREBOARD,
+                 WEATHER_VIEWER,
+                 CLOUD_FILE_STORAGE,
+                 TASK_TRACKER -> true;
+            default -> false;
+        };
+    }
 }
