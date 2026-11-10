@@ -13,6 +13,7 @@ import com.itmentorcommunityplatform.projectservice.model.RoadmapProject;
 import com.itmentorcommunityplatform.projectservice.service.ProjectService;
 import com.itmentorcommunityplatform.projectservice.validation.ProjectValidator;
 import jakarta.validation.Valid;
+import jakarta.validation.constraints.Positive;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.http.HttpStatus;
@@ -82,5 +83,20 @@ public class ProjectController {
     ) {
         ProjectResponse response = projectService.createProjectViaTelegramBotOrImporter(request);
         return ResponseEntity.status(HttpStatus.CREATED).body(response);
+    }
+
+    @GetMapping("/projects/{id}")
+    public ResponseEntity<ProjectResponse> getProjectImplementationById(
+            @RequestHeader("X-Telegram-User-Id") Long telegramUserId,
+            @RequestHeader("X-User-Roles") List<String> userRoles,
+            @Positive(message = "Project implementation ID must be positive")
+            @PathVariable("id") Long projectId
+    ) {
+        if (!userRoles.contains(ROLE_STUDENT)) {
+            log.warn("User is not a student");
+            throw new AccessDeniedException("User does not have STUDENT role");
+        }
+        ProjectResponse response = projectService.getProjectImplementationByIdAndUserId(projectId, telegramUserId);
+        return ResponseEntity.ok(response);
     }
 }
