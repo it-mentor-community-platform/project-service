@@ -118,12 +118,14 @@ public class ProjectService {
     }
 
     @Transactional(readOnly = true)
-    public ProjectResponse getProjectImplementationByIdAndUserId(Long projectId, Long userId) {
+    public ProjectResponse getProjectImplementationByIdAndUserId(Long projectId, Long authorId) {
         Optional<Project> optionalProject = projectRepository.findById(projectId);
-        if (optionalProject.isEmpty() || !userId.equals(optionalProject.get().getAuthorTelegramUserId())) {
+        if (optionalProject.isEmpty() || !authorId.equals(optionalProject.get().getAuthorTelegramUserId())) {
+            log.warn("Project implementation was not found by id {} for authorId={}", projectId, authorId);
             throw new ProjectNotFoundException("id " + projectId);
         }
         Project project = optionalProject.get();
+        log.info("Project implementation was found by id {} for authorId={}", project.getId(), authorId);
         return projectMapper.toResponse(project);
     }
 

@@ -1,9 +1,6 @@
 package com.itmentorcommunityplatform.projectservice.controller;
 
-import com.itmentorcommunityplatform.projectservice.docs.project.CreateProjectViaFrontendDocs;
-import com.itmentorcommunityplatform.projectservice.docs.project.CreateProjectViaTelegramBotOrImporterDocs;
-import com.itmentorcommunityplatform.projectservice.docs.project.GetProjectImplementationsDocs;
-import com.itmentorcommunityplatform.projectservice.docs.project.GetProjectsSummaryDocs;
+import com.itmentorcommunityplatform.projectservice.docs.project.*;
 import com.itmentorcommunityplatform.projectservice.dto.request.project.CreateProjectViaFrontendRequest;
 import com.itmentorcommunityplatform.projectservice.dto.request.project.CreateProjectViaTelegramBotOrImportRequest;
 import com.itmentorcommunityplatform.projectservice.dto.response.ProjectResponse;
@@ -78,6 +75,7 @@ public class ProjectController {
     }
 
     @GetMapping("/projects/{id}")
+    @GetProjectImplementationByIdDocs
     public ResponseEntity<ProjectResponse> getProjectImplementationById(
             @RequestHeader("X-Telegram-User-Id") Long telegramUserId,
             @RequestHeader("X-User-Roles") List<String> userRoles,
