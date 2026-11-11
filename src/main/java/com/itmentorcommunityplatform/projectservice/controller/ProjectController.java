@@ -39,11 +39,7 @@ public class ProjectController {
             @RequestHeader("X-Telegram-User-Id") Long telegramUserId,
             @RequestHeader("X-User-Roles") List<String> userRoles
     ) {
-        if (!userRoles.contains(ROLE_STUDENT)) {
-            log.warn("User is not a student");
-            throw new AccessDeniedException("User does not have STUDENT role");
-        }
-
+        checkForPresenceOfStudentUserRole(userRoles);
         ProjectsSummaryResponse response = projectService.getProjectsSummaryToUserId(telegramUserId);
         return ResponseEntity.status(HttpStatus.OK).body(response);
     }
@@ -55,11 +51,7 @@ public class ProjectController {
             @RequestHeader("X-User-Roles") List<String> userRoles,
             @RequestParam(value = "roadmap_project") RoadmapProject roadmapProject
     ) {
-        if (!userRoles.contains(ROLE_STUDENT)) {
-            log.warn("User is not a student");
-            throw new AccessDeniedException("User does not have STUDENT role");
-        }
-
+        checkForPresenceOfStudentUserRole(userRoles);
         List<ProjectResponse> response = projectService.getProjectImplementations(telegramUserId, roadmapProject);
         return ResponseEntity.status(HttpStatus.OK).body(response);
     }
@@ -92,11 +84,15 @@ public class ProjectController {
             @Positive(message = "Project implementation ID must be positive")
             @PathVariable("id") Long projectId
     ) {
+        checkForPresenceOfStudentUserRole(userRoles);
+        ProjectResponse response = projectService.getProjectImplementationByIdAndUserId(projectId, telegramUserId);
+        return ResponseEntity.ok(response);
+    }
+
+    private void checkForPresenceOfStudentUserRole(List<String> userRoles) {
         if (!userRoles.contains(ROLE_STUDENT)) {
             log.warn("User is not a student");
             throw new AccessDeniedException("User does not have STUDENT role");
         }
-        ProjectResponse response = projectService.getProjectImplementationByIdAndUserId(projectId, telegramUserId);
-        return ResponseEntity.ok(response);
     }
 }
