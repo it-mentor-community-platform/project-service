@@ -4,6 +4,7 @@ import com.itmentorcommunityplatform.projectservice.dto.request.project.CreatePr
 import com.itmentorcommunityplatform.projectservice.dto.request.project.CreateProjectViaTelegramBotOrImportRequest;
 import com.itmentorcommunityplatform.projectservice.dto.response.ProjectResponse;
 import com.itmentorcommunityplatform.projectservice.dto.response.ProjectsSummaryResponse;
+import com.itmentorcommunityplatform.projectservice.exception.ProjectNotFoundException;
 import com.itmentorcommunityplatform.projectservice.kafka.producer.ProjectEventProducer;
 import com.itmentorcommunityplatform.projectservice.mapper.ProjectMapper;
 import com.itmentorcommunityplatform.projectservice.model.DataSourceType;
@@ -17,10 +18,7 @@ import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
 import java.time.Instant;
-import java.util.Comparator;
-import java.util.LinkedHashMap;
-import java.util.LinkedHashSet;
-import java.util.List;
+import java.util.*;
 import java.util.stream.Collectors;
 
 @Service
@@ -116,6 +114,18 @@ public class ProjectService {
         projectEventProducer.sendProjectCreated(
                 projectMapper.toEvent(project, telegramProfileUrl, request.dataSourceType())
         );
+        return projectMapper.toResponse(project);
+    }
+
+    @Transactional(readOnly = true)
+    public ProjectResponse getProjectImplementationByIdAndUserId(Long projectId, Long authorId) {
+        Optional<Project> optionalProject = projectRepository.findById(projectId);
+        if (optionalProject.isEmpty() || !authorId.equals(optionalProject.get().getAuthorTelegramUserId())) {
+            log.warn("Project implementation was not found by id {} for authorId={}", projectId, authorId);
+            throw new ProjectNotFoundException("id " + projectId);
+        }
+        Project project = optionalProject.get();
+        log.info("Project implementation was found by id {} for authorId={}", project.getId(), authorId);
         return projectMapper.toResponse(project);
     }
 
