@@ -1,7 +1,7 @@
 package com.itmentorcommunityplatform.projectservice.dto.request.project;
 
 import com.fasterxml.jackson.annotation.JsonProperty;
-import jakarta.validation.constraints.NotNull;
+import jakarta.validation.constraints.NotBlank;
 import org.hibernate.validator.constraints.URL;
 
 public record UpdateProjectViaFrontendRequest(
@@ -11,7 +11,7 @@ public record UpdateProjectViaFrontendRequest(
                 host = "github.com",
                 message = "URL must be a valid GitHub https URL"
         )
-        @NotNull(message = "Github repository url cannot be empty")
+        @NotBlank(message = "Github repository url cannot be empty")
         String githubRepositoryUrl,
 
         @JsonProperty("deployment_url")

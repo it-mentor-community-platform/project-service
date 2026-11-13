@@ -17,7 +17,6 @@ public final class ProjectValidator {
     }
 
     public static void validatePatchProjectRequest(UpdateProjectViaFrontendRequest request) {
-        String githubRepositoryUrl = request.githubRepositoryUrl();
         String deploymentUrl = request.deploymentUrl();
 
         if (deploymentUrl == null) {
@@ -25,9 +24,6 @@ public final class ProjectValidator {
         }
         if (deploymentUrl.isBlank()) {
             throw new InvalidInputException("Deployment URL cannot be empty");
-        }
-        if (githubRepositoryUrl == null || githubRepositoryUrl.isBlank()) {
-            throw new InvalidInputException("GitHub repository URL cannot be empty");
         }
     }
 }
