@@ -137,15 +137,16 @@ public class ProjectService {
 
         project.setGithubRepositoryUrl(request.githubRepositoryUrl());
         project.setDeploymentUrl(request.deploymentUrl());
-        projectRepository.save(project);
-        log.info("Project updated via FRONTEND. projectId={}", project.getId());
 
         if (!Objects.equals(project.getGithubRepositoryUrl(), (previousGithubRepositoryUrl))
                 || !Objects.equals(project.getDeploymentUrl(), previousDeploymentUrl)) {
+            projectRepository.save(project);
+            log.info("Project updated via FRONTEND. projectId={}", project.getId());
+
             projectEventProducer.sendProjectUpdated(
                     projectMapper.toEvent(project, previousGithubRepositoryUrl)
             );
-        }
+        } else log.info("Project update requested via FRONTEND, no changes detected. projectId={}", projectId);
 
         return projectMapper.toResponse(project);
     }
