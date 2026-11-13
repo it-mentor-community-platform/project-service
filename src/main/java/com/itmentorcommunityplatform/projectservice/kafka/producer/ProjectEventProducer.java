@@ -25,7 +25,7 @@ public class ProjectEventProducer {
         kafkaTemplate.send(projectsProjectCreatedTopic, event)
                 .whenComplete((result, ex) -> {
                     if (ex == null) {
-                        log.info("Event sent to partition {}",
+                        log.info("ProjectCreatedEvent sent to partition {}",
                                 result.getRecordMetadata().partition());
                     } else {
                         log.error("Failed to send event", ex);
@@ -37,7 +37,7 @@ public class ProjectEventProducer {
         kafkaTemplate.send(projectsProjectUpdatedTopic, event)
                 .whenComplete((result, ex) -> {
                     if (ex == null) {
-                        log.info("Event sent to partition {}",
+                        log.info("ProjectUpdatedEvent sent to partition {}",
                                 result.getRecordMetadata().partition());
                     } else {
                         log.error("Failed to send event", ex);
