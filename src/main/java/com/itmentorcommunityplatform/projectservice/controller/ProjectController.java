@@ -78,8 +78,8 @@ public class ProjectController {
     }
 
     @PatchMapping("/projects/{id}")
-    @UpdateProjectViaFrontendDocs
-    public ResponseEntity<ProjectResponse> updateProjectViaFrontend(
+    @UpdateProjectDocs
+    public ResponseEntity<ProjectResponse> updateProject(
             @RequestHeader("X-Telegram-User-Id") Long telegramUserId,
             @RequestHeader("X-User-Roles") List<String> userRoles,
             @PathVariable("id") Long id,
