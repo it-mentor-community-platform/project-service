@@ -1,11 +1,9 @@
 package com.itmentorcommunityplatform.projectservice.controller;
 
-import com.itmentorcommunityplatform.projectservice.docs.project.CreateProjectViaFrontendDocs;
-import com.itmentorcommunityplatform.projectservice.docs.project.CreateProjectViaTelegramBotOrImporterDocs;
-import com.itmentorcommunityplatform.projectservice.docs.project.GetProjectImplementationsDocs;
-import com.itmentorcommunityplatform.projectservice.docs.project.GetProjectsSummaryDocs;
+import com.itmentorcommunityplatform.projectservice.docs.project.*;
 import com.itmentorcommunityplatform.projectservice.dto.request.project.CreateProjectViaFrontendRequest;
 import com.itmentorcommunityplatform.projectservice.dto.request.project.CreateProjectViaTelegramBotOrImportRequest;
+import com.itmentorcommunityplatform.projectservice.dto.request.project.UpdateProjectViaFrontendRequest;
 import com.itmentorcommunityplatform.projectservice.dto.response.ProjectResponse;
 import com.itmentorcommunityplatform.projectservice.dto.response.ProjectsSummaryResponse;
 import com.itmentorcommunityplatform.projectservice.exception.AccessDeniedException;
@@ -17,12 +15,14 @@ import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
+import org.springframework.validation.annotation.Validated;
 import org.springframework.web.bind.annotation.*;
 
 import java.util.List;
 
 @RestController
 @RequestMapping("/api/project")
+@Validated
 @RequiredArgsConstructor
 @Slf4j
 public class ProjectController {
@@ -82,5 +82,23 @@ public class ProjectController {
     ) {
         ProjectResponse response = projectService.createProjectViaTelegramBotOrImporter(request);
         return ResponseEntity.status(HttpStatus.CREATED).body(response);
+    }
+
+    @PatchMapping("/projects/{id}")
+    @UpdateProjectViaFrontendDocs
+    public ResponseEntity<ProjectResponse> updateProjectViaFrontend(
+            @RequestHeader("X-Telegram-User-Id") Long telegramUserId,
+            @RequestHeader("X-User-Roles") List<String> userRoles,
+            @PathVariable("id") Long id,
+            @Valid @RequestBody UpdateProjectViaFrontendRequest request
+    ) {
+        if (!userRoles.contains(ROLE_STUDENT)) {
+            log.warn("User is not a student");
+            throw new AccessDeniedException("User does not have STUDENT role");
+        }
+
+        ProjectValidator.validatePatchProjectRequest(request);
+        ProjectResponse response = projectService.updateProjectViaFrontend(id, telegramUserId, request);
+        return ResponseEntity.status(HttpStatus.OK).body(response);
     }
 }
