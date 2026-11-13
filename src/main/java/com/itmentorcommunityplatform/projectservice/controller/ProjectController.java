@@ -11,6 +11,7 @@ import com.itmentorcommunityplatform.projectservice.model.RoadmapProject;
 import com.itmentorcommunityplatform.projectservice.service.ProjectService;
 import com.itmentorcommunityplatform.projectservice.validation.ProjectValidator;
 import jakarta.validation.Valid;
+import jakarta.validation.constraints.Positive;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.http.HttpStatus;
@@ -38,11 +39,7 @@ public class ProjectController {
             @RequestHeader("X-Telegram-User-Id") Long telegramUserId,
             @RequestHeader("X-User-Roles") List<String> userRoles
     ) {
-        if (!userRoles.contains(ROLE_STUDENT)) {
-            log.warn("User is not a student");
-            throw new AccessDeniedException("User does not have STUDENT role");
-        }
-
+        checkForPresenceOfStudentUserRole(userRoles);
         ProjectsSummaryResponse response = projectService.getProjectsSummaryToUserId(telegramUserId);
         return ResponseEntity.status(HttpStatus.OK).body(response);
     }
@@ -54,11 +51,7 @@ public class ProjectController {
             @RequestHeader("X-User-Roles") List<String> userRoles,
             @RequestParam(value = "roadmap_project") RoadmapProject roadmapProject
     ) {
-        if (!userRoles.contains(ROLE_STUDENT)) {
-            log.warn("User is not a student");
-            throw new AccessDeniedException("User does not have STUDENT role");
-        }
-
+        checkForPresenceOfStudentUserRole(userRoles);
         List<ProjectResponse> response = projectService.getProjectImplementations(telegramUserId, roadmapProject);
         return ResponseEntity.status(HttpStatus.OK).body(response);
     }
@@ -92,13 +85,29 @@ public class ProjectController {
             @PathVariable("id") Long id,
             @Valid @RequestBody UpdateProjectViaFrontendRequest request
     ) {
+      checkForPresenceOfStudentUserRole(userRoles);
+      ProjectValidator.validatePatchProjectRequest(request);
+      ProjectResponse response = projectService.updateProjectViaFrontend(id, telegramUserId, request);
+      return ResponseEntity.status(HttpStatus.OK).body(response);
+    }
+      
+    @GetMapping("/projects/{id}")
+    @GetProjectImplementationByIdDocs
+    public ResponseEntity<ProjectResponse> getProjectImplementationById(
+            @RequestHeader("X-Telegram-User-Id") Long telegramUserId,
+            @RequestHeader("X-User-Roles") List<String> userRoles,
+            @Positive(message = "Project implementation ID must be positive")
+            @PathVariable("id") Long projectId
+    ) {
+        checkForPresenceOfStudentUserRole(userRoles);
+        ProjectResponse response = projectService.getProjectImplementationByIdAndUserId(projectId, telegramUserId);
+        return ResponseEntity.ok(response);
+    }
+
+    private void checkForPresenceOfStudentUserRole(List<String> userRoles) {
         if (!userRoles.contains(ROLE_STUDENT)) {
             log.warn("User is not a student");
             throw new AccessDeniedException("User does not have STUDENT role");
         }
-
-        ProjectValidator.validatePatchProjectRequest(request);
-        ProjectResponse response = projectService.updateProjectViaFrontend(id, telegramUserId, request);
-        return ResponseEntity.status(HttpStatus.OK).body(response);
     }
 }
