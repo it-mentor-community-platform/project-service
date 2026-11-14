@@ -18,4 +18,5 @@ public class Project {
         private String programmingLanguage;
         private RoadmapProject roadmapProject;
         private Long addedTimestamp;
+        private String deploymentUrl;
 }

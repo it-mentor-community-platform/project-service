@@ -28,6 +28,10 @@ public record CreateProjectViaFrontendRequest(
         Long addedTimestamp,
 
         @JsonProperty("project_source_type")
-        String projectSourceType
+        String projectSourceType,
+
+        @JsonProperty("deployment_url")
+        @URL(message = "The deployment URL must be valid")
+        String deploymentUrl
 ) {
 }

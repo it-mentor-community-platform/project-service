@@ -20,6 +20,7 @@ spring:
 kafka:
   topic:
     projects-project-created: projects.project.created
+    projects-project-updated: projects.project.updated
     notifications-students-review-submitted: notifications.students.review.submitted
     reviews-review-created: reviews.review.created
 

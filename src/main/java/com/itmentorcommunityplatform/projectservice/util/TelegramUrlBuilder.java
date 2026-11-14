@@ -1,5 +1,6 @@
 package com.itmentorcommunityplatform.projectservice.util;
 
+import com.itmentorcommunityplatform.projectservice.exception.InvalidInputException;
 import lombok.experimental.UtilityClass;
 
 @UtilityClass
@@ -19,7 +20,7 @@ public class TelegramUrlBuilder {
 
     private void validateBlank(String username) {
         if (username.isBlank()) {
-            throw new IllegalArgumentException("Username must not be blank");
+            throw new InvalidInputException("Username must not be blank");
         }
     }
 }

@@ -1,0 +1,186 @@
+### Успешное обновление проекта 200 OK (Запустите дважды для проверки изменения без эффекта)
+# Перед запуском: проект с указаным ID уже должен существовать в БД
+PATCH http://localhost:8084/api/project/projects/1
+Content-Type: application/json
+X-User-Roles: STUDENT
+X-Telegram-User-Id: 123456789
+
+{
+  "github_repository_url": "https://github.com/zhukovsd/currency-test-1",
+  "deployment_url": "https://server/currency-exchange-project"
+}
+
+### Успешное обновление проекта, который не поддерживает деплой 200 OK
+# Перед запуском: проект с указаным ID уже должен существовать в БД
+PATCH http://localhost:8084/api/project/projects/2
+Content-Type: application/json
+X-User-Roles: STUDENT
+X-Telegram-User-Id: 123456789
+
+{
+  "github_repository_url": "https://github.com/zhukovsd/simulation-test-2"
+}
+
+### Ошибка 409: Другая реализация с такой ссылкой на репозиторий уже существует
+# Перед запуском: проект с указаным ID и проект с существующим github_repository_url уже должен существовать в БД
+PATCH http://localhost:8084/api/project/projects/3
+Content-Type: application/json
+X-User-Roles: STUDENT
+X-Telegram-User-Id: 123456789
+
+{
+  "github_repository_url": "https://github.com/zhukovsd/currency-test-1",
+  "deployment_url": "https://server/currency-exchange-project"
+}
+
+### Ошибка 404: Реализация не найдена или принадлежит другому пользователю
+PATCH http://localhost:8084/api/project/projects/123
+Content-Type: application/json
+X-User-Roles: STUDENT
+X-Telegram-User-Id: 123456789
+
+{
+  "github_repository_url": "https://github.com/zhukovsd/currency-test-1",
+  "deployment_url": "https://server/currency-exchange-project"
+}
+
+### Ошибка 403: У пользователя нет роли STUDENT
+PATCH http://localhost:8084/api/project/projects/1
+Content-Type: application/json
+X-User-Roles: MENTOR
+X-Telegram-User-Id: 123456789
+
+{
+  "github_repository_url": "https://github.com/zhukovsd/currency-test-1",
+  "deployment_url": "https://server/currency-exchange-project"
+}
+
+### Ошибка 400: Отсутствует заголовок X-Telegram-User-Id
+PATCH http://localhost:8084/api/project/projects/1
+Content-Type: application/json
+X-User-Roles: STUDENT
+
+{
+  "github_repository_url": "https://github.com/zhukovsd/currency-test-1",
+  "deployment_url": "https://server/currency-exchange-project"
+}
+
+### Ошибка 400: Отсутствует заголовок X-Telegram-User-Roles
+PATCH http://localhost:8084/api/project/projects/1
+Content-Type: application/json
+X-Telegram-User-Id: 123456789
+
+{
+  "github_repository_url": "https://github.com/zhukovsd/currency-test-1",
+  "deployment_url": "https://server/currency-exchange-project"
+}
+
+### Ошибка 400: Невалидный ID проекта
+PATCH http://localhost:8084/api/project/projects/abc
+Content-Type: application/json
+X-User-Roles: STUDENT
+X-Telegram-User-Id: 123456789
+
+{
+  "github_repository_url": "https://github.com/zhukovsd/currency-test-1",
+  "deployment_url": "https://server/currency-exchange-project"
+}
+
+### Ошибка 400: Невалидный URL репозитория
+PATCH http://localhost:8084/api/project/projects/1
+Content-Type: application/json
+X-User-Roles: STUDENT
+X-Telegram-User-Id: 123456789
+
+{
+  "github_repository_url": "github.com/zhukovsd/currency-test-1",
+  "deployment_url": "https://server/currency-exchange-project"
+}
+
+### Ошибка 400: URL репозитория пустая строка
+PATCH http://localhost:8084/api/project/projects/1
+Content-Type: application/json
+X-User-Roles: STUDENT
+X-Telegram-User-Id: 123456789
+
+{
+  "github_repository_url": "",
+  "deployment_url": "https://server/currency-exchange-project"
+}
+
+### Ошибка 400: URL репозитория указан как null
+PATCH http://localhost:8084/api/project/projects/1
+Content-Type: application/json
+X-User-Roles: STUDENT
+X-Telegram-User-Id: 123456789
+
+{
+  "github_repository_url": null,
+  "deployment_url": "https://server/currency-exchange-project"
+}
+
+### Ошибка 400: Невалидный URL деплоя
+PATCH http://localhost:8084/api/project/projects/1
+Content-Type: application/json
+X-User-Roles: STUDENT
+X-Telegram-User-Id: 123456789
+
+{
+  "github_repository_url": "https://github.com/zhukovsd/currency-test-1",
+  "deployment_url": "server/currency-exchange-project"
+}
+
+### Ошибка 400: URL деплоя пустая строка
+PATCH http://localhost:8084/api/project/projects/1
+Content-Type: application/json
+X-User-Roles: STUDENT
+X-Telegram-User-Id: 123456789
+
+{
+  "github_repository_url": "https://github.com/zhukovsd/currency-test-1",
+  "deployment_url": ""
+}
+
+### Ошибка 400: Проект не поддерживает деплой
+# Перед запуском: в БД должен существовать проект с указанным ID и roadmap_project = HANGMAN или SIMULATION
+PATCH http://localhost:8084/api/project/projects/2
+Content-Type: application/json
+X-User-Roles: STUDENT
+X-Telegram-User-Id: 123456789
+
+{
+  "github_repository_url": "https://github.com/zhukovsd/simulation-test-1",
+  "deployment_url": "https://server/hangman-or-simulation-project"
+}
+
+### Ошибка 400: Тело запроса не содержит изменяемые поля (github_repository_url или deployment_url)
+PATCH http://localhost:8084/api/project/projects/1
+Content-Type: application/json
+X-User-Roles: STUDENT
+X-Telegram-User-Id: 123456789
+
+{
+}
+
+### Ошибка 400: Тело запроса не содержит поле github_repository_url
+PATCH http://localhost:8084/api/project/projects/1
+Content-Type: application/json
+X-User-Roles: STUDENT
+X-Telegram-User-Id: 123456789
+
+{
+  "deployment_url": "https://server/hangman-or-currency-project"
+}
+
+### Ошибка 400: Тело запроса содержит неизменяемые поля (programming_language, roadmap_project и т.д.)
+PATCH http://localhost:8084/api/project/projects/1
+Content-Type: application/json
+X-User-Roles: STUDENT
+X-Telegram-User-Id: 123456789
+
+{
+  "github_repository_url": "https://github.com/zhukovsd/simulation-test-1",
+  "deployment_url": "https://server/hangman-or-simulation-project",
+  "programming_language": "Python",
+  "roadmap_project": "CURRENCY_EXCHANGE"
+}

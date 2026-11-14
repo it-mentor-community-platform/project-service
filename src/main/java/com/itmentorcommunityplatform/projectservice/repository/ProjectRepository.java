@@ -14,6 +14,10 @@ public interface ProjectRepository extends ListCrudRepository<Project, Long> {
             String githubRepositoryUrl
     );
 
+    Optional<Project> findByIdAndAuthorTelegramUserId(
+            Long id, Long authorTelegramUserId
+    );
+
     List<Project> findAllByAuthorTelegramUserId(
             Long authorTelegramUserId
     );

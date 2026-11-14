@@ -4,6 +4,7 @@ import com.itmentorcommunityplatform.projectservice.dto.request.project.CreatePr
 import com.itmentorcommunityplatform.projectservice.dto.request.project.CreateProjectViaTelegramBotOrImportRequest;
 import com.itmentorcommunityplatform.projectservice.dto.response.ProjectResponse;
 import com.itmentorcommunityplatform.projectservice.kafka.ProjectCreatedEvent;
+import com.itmentorcommunityplatform.projectservice.kafka.ProjectUpdatedEvent;
 import com.itmentorcommunityplatform.projectservice.model.DataSourceType;
 import com.itmentorcommunityplatform.projectservice.model.Project;
 import org.mapstruct.Mapper;
@@ -17,6 +18,8 @@ public interface ProjectMapper {
     @Mapping(target = "authorTelegramProfileUrl", source = "telegramProfileUrl")
     @Mapping(target = "projectSourceType", source = "sourceType")
     ProjectCreatedEvent toEvent(Project project, String telegramProfileUrl, DataSourceType sourceType);
+
+    ProjectUpdatedEvent toEvent(Project project, String previousGithubRepositoryUrl);
 
     ProjectResponse toResponse(Project project);
 

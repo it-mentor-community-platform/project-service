@@ -1,0 +1,55 @@
+### 200 ОК - Успешное получение одной персональной реализации проекта по её ID
+# Перед запуском .http тестов провести импорт проектов из репозитория data-importer
+GET http://localhost:8084/api/project/projects/1
+X-Telegram-User-Id: 545249849
+X-User-Roles: STUDENT
+
+{
+  "id": 1,
+  "author_telegram_user_id": 545249849,
+  "github_repository_url": "https://github.com/anelfer/simulation2077",
+  "programming_language": "Kotlin",
+  "roadmap_project": "SIMULATION",
+  "added_timestamp": 1622505600,
+  "deployment_url": null
+}
+
+### 400 BAD REQUEST - Отсутсвует обязательный заголовок "X-Telegram-User-Id"
+# Перед запуском .http тестов провести импорт проектов из репозитория data-importer
+GET http://localhost:8084/api/project/projects/1
+X-User-Roles: STUDENT
+
+### 400 BAD REQUEST - Отсутсвует обязательный заголовок "X-User-Roles"
+# Перед запуском .http тестов провести импорт проектов из репозитория data-importer
+GET http://localhost:8084/api/project/projects/1
+X-Telegram-User-Id: 545249849
+
+### 400 BAD REQUEST - Некорректное значение обязательного параметра пути "id" (недопустимый тип параметра)
+# Перед запуском .http тестов провести импорт проектов из репозитория data-importer
+GET http://localhost:8084/api/project/projects/any
+X-Telegram-User-Id: 545249849
+X-User-Roles: STUDENT
+
+### 400 BAD REQUEST - Некорректное значение обязательного параметра пути "id" (недопустимое значение)
+# Перед запуском .http тестов провести импорт проектов из репозитория data-importer
+GET http://localhost:8084/api/project/projects/-1
+X-Telegram-User-Id: 545249849
+X-User-Roles: STUDENT
+
+### 403 FORBIDDEN -  У пользователя нет роли STUDENT
+# Перед запуском .http тестов провести импорт проектов из репозитория data-importer
+GET http://localhost:8084/api/project/projects/1
+X-Telegram-User-Id: 545249849
+X-User-Roles: ADMIN
+
+### 404 NOT FOUND - Реализация не найдена или принадлежит другому пользователю
+# Перед запуском .http тестов провести импорт проектов из репозитория data-importer
+GET http://localhost:8084/api/project/projects/1000000
+X-Telegram-User-Id: 545249849
+X-User-Roles: STUDENT
+
+### 404 NOT FOUND - Реализация не найдена или принадлежит другому пользователю
+# Перед запуском .http тестов провести импорт проектов из репозитория data-importer
+GET http://localhost:8084/api/project/projects/1
+X-Telegram-User-Id: 545249841
+X-User-Roles: STUDENT

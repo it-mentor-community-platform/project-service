@@ -2,8 +2,11 @@ package com.itmentorcommunityplatform.projectservice.service;
 
 import com.itmentorcommunityplatform.projectservice.dto.request.project.CreateProjectViaFrontendRequest;
 import com.itmentorcommunityplatform.projectservice.dto.request.project.CreateProjectViaTelegramBotOrImportRequest;
+import com.itmentorcommunityplatform.projectservice.dto.request.project.UpdateProjectViaFrontendRequest;
 import com.itmentorcommunityplatform.projectservice.dto.response.ProjectResponse;
 import com.itmentorcommunityplatform.projectservice.dto.response.ProjectsSummaryResponse;
+import com.itmentorcommunityplatform.projectservice.exception.InvalidInputException;
+import com.itmentorcommunityplatform.projectservice.exception.ProjectNotFoundException;
 import com.itmentorcommunityplatform.projectservice.kafka.producer.ProjectEventProducer;
 import com.itmentorcommunityplatform.projectservice.mapper.ProjectMapper;
 import com.itmentorcommunityplatform.projectservice.model.DataSourceType;
@@ -17,10 +20,7 @@ import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
 import java.time.Instant;
-import java.util.Comparator;
-import java.util.LinkedHashMap;
-import java.util.LinkedHashSet;
-import java.util.List;
+import java.util.*;
 import java.util.stream.Collectors;
 
 @Service
@@ -116,6 +116,50 @@ public class ProjectService {
         projectEventProducer.sendProjectCreated(
                 projectMapper.toEvent(project, telegramProfileUrl, request.dataSourceType())
         );
+        return projectMapper.toResponse(project);
+    }
+
+    @Transactional
+    public ProjectResponse updateProjectViaFrontend(
+            Long projectId,
+            Long userId,
+            UpdateProjectViaFrontendRequest request
+    ) {
+        Project project = projectRepository.findByIdAndAuthorTelegramUserId(projectId, userId)
+                .orElseThrow(() -> new ProjectNotFoundException("Project with specified ID does not exist"));
+
+        if (!project.getRoadmapProject().supportsDeployment() && request.deploymentUrl() != null) {
+            throw new InvalidInputException("The project does not support deployment");
+        }
+
+        String previousGithubRepositoryUrl = project.getGithubRepositoryUrl();
+        String previousDeploymentUrl = project.getDeploymentUrl();
+
+        project.setGithubRepositoryUrl(request.githubRepositoryUrl());
+        project.setDeploymentUrl(request.deploymentUrl());
+
+        if (!Objects.equals(project.getGithubRepositoryUrl(), (previousGithubRepositoryUrl))
+                || !Objects.equals(project.getDeploymentUrl(), previousDeploymentUrl)) {
+            projectRepository.save(project);
+            log.info("Project updated via FRONTEND. projectId={}", project.getId());
+
+            projectEventProducer.sendProjectUpdated(
+                    projectMapper.toEvent(project, previousGithubRepositoryUrl)
+            );
+        } else log.info("Project update requested via FRONTEND, no changes detected. projectId={}", projectId);
+
+        return projectMapper.toResponse(project);
+    }
+
+    @Transactional(readOnly = true)
+    public ProjectResponse getProjectImplementationByIdAndUserId(Long projectId, Long authorId) {
+        Optional<Project> optionalProject = projectRepository.findById(projectId);
+        if (optionalProject.isEmpty() || !authorId.equals(optionalProject.get().getAuthorTelegramUserId())) {
+            log.warn("Project implementation was not found by id {} for authorId={}", projectId, authorId);
+            throw new ProjectNotFoundException("id " + projectId);
+        }
+        Project project = optionalProject.get();
+        log.info("Project implementation was found by id {} for authorId={}", project.getId(), authorId);
         return projectMapper.toResponse(project);
     }
 

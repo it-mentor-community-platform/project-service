@@ -2,6 +2,7 @@ package com.itmentorcommunityplatform.projectservice.exception;
 
 import com.itmentorcommunityplatform.projectservice.dto.ErrorResponse;
 import lombok.extern.slf4j.Slf4j;
+import org.springframework.context.MessageSourceResolvable;
 import org.springframework.dao.DuplicateKeyException;
 import org.springframework.data.relational.core.conversion.DbActionExecutionException;
 import org.springframework.http.HttpStatus;
@@ -12,10 +13,12 @@ import org.springframework.web.bind.MissingRequestHeaderException;
 import org.springframework.web.bind.MissingServletRequestParameterException;
 import org.springframework.web.bind.annotation.ExceptionHandler;
 import org.springframework.web.bind.annotation.RestControllerAdvice;
+import org.springframework.web.method.annotation.HandlerMethodValidationException;
 import org.springframework.web.method.annotation.MethodArgumentTypeMismatchException;
 import org.springframework.web.server.ResponseStatusException;
 
 import java.util.List;
+import java.util.Objects;
 
 @RestControllerAdvice
 @Slf4j
@@ -72,12 +75,34 @@ public class GlobalExceptionHandler {
                 .body(new ErrorResponse("Invalid request body"));
     }
 
+    @ExceptionHandler(InvalidInputException.class)
+    public ResponseEntity<ErrorResponse> handleInvalidInputException(InvalidInputException ex) {
+        log.warn("Input validation failed: {}", ex.getMessage());
+        return ResponseEntity
+                .status(HttpStatus.BAD_REQUEST)
+                .body(new ErrorResponse("Invalid input: " + ex.getMessage()));
+    }
+
     @ExceptionHandler(MissingRequestHeaderException.class)
     public ResponseEntity<ErrorResponse> handleMissingHeaderException(MissingRequestHeaderException ex) {
         log.warn("Missing header: {}", ex.getHeaderName());
         return ResponseEntity
                 .status(HttpStatus.BAD_REQUEST)
                 .body(new ErrorResponse("Missing required header: " + ex.getHeaderName()));
+    }
+
+    @ExceptionHandler(HandlerMethodValidationException.class)
+    public ResponseEntity<ErrorResponse> handleHandlerMethodValidationException(HandlerMethodValidationException ex) {
+        String errorMessage = ex.getParameterValidationResults().stream()
+                .flatMap(result -> result.getResolvableErrors().stream())
+                .map(MessageSourceResolvable::getDefaultMessage)
+                .filter(Objects::nonNull)
+                .findFirst()
+                .orElse("Invalid request parameter");
+        log.warn("Validation failed: {}", errorMessage);
+        return ResponseEntity
+                .status(HttpStatus.BAD_REQUEST)
+                .body(new ErrorResponse("Validation failed: " + errorMessage));
     }
 
     @ExceptionHandler(ProjectNotFoundException.class)
