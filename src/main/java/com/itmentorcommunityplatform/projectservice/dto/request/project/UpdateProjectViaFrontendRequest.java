@@ -18,8 +18,8 @@ public record UpdateProjectViaFrontendRequest(
 
         @JsonProperty("deployment_url")
         @URL(
-                protocol = "https",
-                message = "URL must be a valid https URL"
+                regexp = "^(http|https)://.*",
+                message = "URL must be a valid http or https URL"
         )
         String deploymentUrl
 ) {
