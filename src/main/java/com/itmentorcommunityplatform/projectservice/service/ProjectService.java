@@ -146,7 +146,9 @@ public class ProjectService {
             projectEventProducer.sendProjectUpdated(
                     projectMapper.toEvent(project, previousGithubRepositoryUrl)
             );
-        } else log.info("Project update requested via FRONTEND, no changes detected. projectId={}", projectId);
+        } else {
+            log.info("Project update requested via FRONTEND, no changes detected. projectId={}", projectId);
+        }
 
         return projectMapper.toResponse(project);
     }
