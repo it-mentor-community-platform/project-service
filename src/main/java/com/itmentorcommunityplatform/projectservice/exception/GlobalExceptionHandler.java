@@ -1,6 +1,7 @@
 package com.itmentorcommunityplatform.projectservice.exception;
 
 import com.itmentorcommunityplatform.projectservice.dto.ErrorResponse;
+import jakarta.validation.ConstraintViolationException;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.context.MessageSourceResolvable;
 import org.springframework.dao.DuplicateKeyException;
@@ -140,6 +141,19 @@ public class GlobalExceptionHandler {
         return ResponseEntity
                 .status(HttpStatus.BAD_REQUEST)
                 .body(new ErrorResponse("Missing required parameter: " + ex.getParameterName()));
+    }
+
+    @ExceptionHandler(ConstraintViolationException.class)
+    public ResponseEntity<ErrorResponse> handleConstraintViolationException(ConstraintViolationException ex) {
+        List<String> errors = ex.getConstraintViolations()
+                .stream()
+                .map(error -> error.getMessage() + ": " + error.getInvalidValue())
+                .toList();
+        String errorMessage = String.join("; ", errors);
+        log.warn("Validation failed: {}", errorMessage);
+        return ResponseEntity
+                .status(HttpStatus.BAD_REQUEST)
+                .body(new ErrorResponse(errorMessage));
     }
 
     @ExceptionHandler(Exception.class)
