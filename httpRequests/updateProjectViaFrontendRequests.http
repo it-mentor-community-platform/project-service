@@ -184,3 +184,37 @@ X-Telegram-User-Id: 123456789
   "programming_language": "Python",
   "roadmap_project": "CURRENCY_EXCHANGE"
 }
+
+
+### Синхронизация GitHub URL проекта с profile-service — 200 OK
+PATCH http://localhost:8084/api/project/projects/1
+Content-Type: application/json
+X-User-Roles: STUDENT
+X-Telegram-User-Id: 545249849
+
+{
+  "github_repository_url": "https://github.com/anelfer/simulation2077_updated",
+  "deployment_url": null
+}
+
+### Повторный PATCH с текущими значениями — 200 OK, без нового события
+PATCH http://localhost:8084/api/project/projects/1
+Content-Type: application/json
+X-User-Roles: STUDENT
+X-Telegram-User-Id: 545249849
+
+{
+  "github_repository_url": "https://github.com/anelfer/simulation2077_updated",
+  "deployment_url": null
+}
+
+### Изменение только деплоя — 200 OK, без изменений в БД profile-service
+PATCH http://localhost:8084/api/project/projects/3
+Content-Type: application/json
+X-User-Roles: STUDENT
+X-Telegram-User-Id: 39671982
+
+{
+  "github_repository_url": "https://github.com/Jollykai/tennisTableboard",
+  "deployment_url": "https://example.com/tennis-scoreboard"
+}
